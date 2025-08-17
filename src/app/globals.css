@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* APOSS Brand Colors */
+:root {
+  /* Primary Brand Colors */
+  --aposs-navy: #1a365d;
+  --aposs-blue: #3182ce;
+  --aposs-red: #e53e3e;
+  --aposs-orange: #fd7f3d;
+  
+  /* Neutral Colors */
+  --aposs-white: #ffffff;
+  --aposs-gray-50: #f7fafc;
+  --aposs-gray-100: #edf2f7;
+  --aposs-gray-200: #e2e8f0;
+  --aposs-gray-300: #cbd5e0;
+  --aposs-gray-400: #a0aec0;
+  --aposs-gray-500: #718096;
+  --aposs-gray-600: #4a5568;
+  --aposs-gray-700: #2d3748;
+  --aposs-gray-800: #1a202c;
+  --aposs-gray-900: #171923;
+  
+  /* Accent Colors */
+  --aposs-gradient-start: var(--aposs-blue);
+  --aposs-gradient-end: var(--aposs-navy);
+}
+
 /* Custom fonts and base styles */
 body {
   font-family: var(--font-geist-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

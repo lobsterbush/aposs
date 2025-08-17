@@ -1,135 +1,108 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/layout/header'
-import { Calendar, Users, Globe, BookOpen, ArrowRight, Sparkles, Video, Star, ChevronDown, MapPin, Award, Zap } from 'lucide-react'
+import { Calendar, Users, Globe, BookOpen, ArrowRight, Video, Star, MapPin, Award, Zap, Play, Clock, CheckCircle, Sparkles } from 'lucide-react'
 
 export default function Home() {
   return (
     <>
       <Header />
-      <div className="flex flex-col">
+      <div className="flex flex-col pt-20">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background with Asia map pattern and gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-          {/* Animated geometric shapes */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
-            <div className="absolute top-40 right-20 w-24 h-24 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '2s'}}></div>
-            <div className="absolute bottom-40 left-20 w-40 h-40 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
-            <div className="absolute bottom-20 right-10 w-28 h-28 bg-green-400 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '6s'}}></div>
-          </div>
-          
-          {/* Asia silhouette overlay */}
-          <div className="absolute inset-0 opacity-10">
-            <svg viewBox="0 0 400 300" className="w-full h-full">
-              <path 
-                d="M80 150 Q100 120 140 130 Q180 125 220 140 Q260 135 300 150 Q320 170 310 200 Q280 220 240 210 Q200 215 160 205 Q120 200 100 180 Q85 165 80 150Z"
-                fill="white" 
-                opacity="0.3"
-              />
-            </svg>
-          </div>
-          
-          {/* Grain texture overlay */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0 bg-black bg-opacity-10 mix-blend-overlay"></div>
-          </div>
+      <section className="relative py-20 bg-gradient-to-br from-blue-50 via-white to-gray-50 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
+          <div className="absolute bottom-20 left-20 w-80 h-80 bg-gray-100 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '3s'}}></div>
+        </div>
+        
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233182ce' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }}></div>
         </div>
         
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          {/* Floating badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium mb-8 animate-fade-in">
-            <Sparkles className="w-4 h-4 mr-2 text-yellow-400" />
-            Over 100 seminars hosted worldwide
-          </div>
-          
-          {/* Main heading with enhanced typography */}
+          {/* Hero Logo and Title */}
           <div className="mb-12">
-            <h1 className="text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-6">
-              <span className="bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent drop-shadow-2xl">
-                APOSS
-              </span>
-            </h1>
-            <div className="text-xl md:text-2xl text-white/80 font-light tracking-wide mb-4">
-              Asian Politics Online Seminar Series
+            <div className="flex justify-center mb-8">
+              <div className="relative w-24 h-24">
+                <Image
+                  src="/branding/Blue Logo ht 2000px.png"
+                  alt="APOSS Logo"
+                  width={96}
+                  height={96}
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </div>
-            <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full"></div>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900">
+              Asian Politics Online
+              <br />
+              <span className="text-blue-600">Seminar Series</span>
+            </h1>
+            <div className="h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
           </div>
           
-          {/* Enhanced tagline */}
-          <p className="text-2xl md:text-3xl text-white/90 max-w-5xl mx-auto mb-16 leading-relaxed font-light">
-            Connecting political scientists worldwide who study
-            <span className="relative inline-block mx-2">
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent font-semibold">Asian politics</span>
-              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full"></div>
-            </span>
-            and fostering global academic collaboration.
+          {/* Professional tagline */}
+          <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto mb-12 leading-relaxed">
+            Connecting political scientists worldwide to advance our understanding of Asian politics 
+            through collaborative research and scholarly exchange.
           </p>
           
-          {/* Enhanced CTA section */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
-            <Button asChild size="lg" className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 border-0">
+          {/* Achievement badge */}
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-12">
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Over 100 seminars hosted worldwide since 2020
+          </div>
+          
+          {/* CTA section */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
               <Link href="/submit">
                 <span className="flex items-center">
-                  Submit Your Research
-                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                  Submit Research Proposal
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </span>
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="group border-2 border-white/30 text-white hover:bg-white/10 px-10 py-6 text-xl font-semibold rounded-2xl backdrop-blur-md hover:border-white/50 transition-all duration-300">
+            <Button asChild variant="outline" size="lg" className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-lg">
               <Link href="/schedule">
                 <span className="flex items-center">
-                  <Calendar className="mr-3 h-6 w-6" />
+                  <Calendar className="mr-2 h-5 w-5" />
                   View Schedule
                 </span>
               </Link>
             </Button>
           </div>
           
-          {/* Enhanced stats with better visual hierarchy */}
+          {/* Stats with better visual hierarchy */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="group text-center p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+              <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
                 <Video className="w-8 h-8 text-white" />
               </div>
-              <div className="text-5xl font-bold text-white mb-2">100+</div>
-              <div className="text-white/70 font-medium text-lg">Seminars Hosted</div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">100+</div>
+              <div className="text-gray-600 font-medium">Seminars Hosted</div>
             </div>
-            <div className="group text-center p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+              <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
                 <MapPin className="w-8 h-8 text-white" />
               </div>
-              <div className="text-5xl font-bold text-white mb-2">50+</div>
-              <div className="text-white/70 font-medium text-lg">Countries Represented</div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">50+</div>
+              <div className="text-gray-600 font-medium">Countries Represented</div>
             </div>
-            <div className="group text-center p-8 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center">
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+              <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
                 <Users className="w-8 h-8 text-white" />
               </div>
-              <div className="text-5xl font-bold text-white mb-2">1000+</div>
-              <div className="text-white/70 font-medium text-lg">Researchers Connected</div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">1000+</div>
+              <div className="text-gray-600 font-medium">Researchers Connected</div>
             </div>
           </div>
-        </div>
-        
-        {/* Enhanced scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/60 animate-bounce cursor-pointer">
-          <div className="flex flex-col items-center">
-            <span className="text-sm mb-2">Discover More</span>
-            <ChevronDown className="h-8 w-8" />
-          </div>
-        </div>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-20 left-20 opacity-20">
-          <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-        </div>
-        <div className="absolute top-40 right-40 opacity-30">
-          <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-        </div>
-        <div className="absolute bottom-40 left-40 opacity-25">
-          <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
         </div>
       </section>
 
