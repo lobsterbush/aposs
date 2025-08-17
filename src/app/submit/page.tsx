@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Upload, Send, CheckCircle, FileText, User, Mail, Building } from 'lucide-react'
+import { Header } from '@/components/layout/header'
+import { ArrowLeft, Send, CheckCircle, FileText, User, Mail, Building, Sparkles, ArrowRight, Star, Globe, Award } from 'lucide-react'
 import Link from 'next/link'
 
 interface SubmissionData {
@@ -77,20 +78,27 @@ export default function SubmitPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+      <div className="min-h-screen bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 flex items-center justify-center p-6 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
+        </div>
+        
+        <div className="relative max-w-md w-full glass rounded-3xl p-10 text-center animate-scale-in">
+          <div className="w-20 h-20 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-elegant animate-pulse-glow">
+            <CheckCircle className="w-10 w-10 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Submission Received!</h1>
-          <p className="text-gray-600 mb-6">
-            Thank you for your submission. We'll review your proposal and get back to you within 2-3 business days.
+          <h1 className="text-3xl font-bold text-white mb-6 gradient-text-cool">Submission Received!</h1>
+          <p className="text-white/90 mb-8 text-lg leading-relaxed">
+            Thank you for your submission. We&apos;ll review your proposal and get back to you within 2-3 business days.
           </p>
-          <div className="space-y-3">
-            <Button asChild className="w-full">
+          <div className="space-y-4">
+            <Button asChild className="w-full bg-white text-green-600 hover:bg-white/90 font-semibold py-3 rounded-2xl shadow-lg">
               <Link href="/">Return to Home</Link>
             </Button>
-            <Button variant="outline" asChild className="w-full">
+            <Button variant="outline" asChild className="w-full border-2 border-white/30 text-white hover:bg-white/10 py-3 rounded-2xl backdrop-blur-md">
               <Link href="/schedule">View Schedule</Link>
             </Button>
           </div>
@@ -100,54 +108,107 @@ export default function SubmitPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="mb-8">
-          <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium mb-6 transition-colors">
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute bottom-40 left-20 w-40 h-40 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '4s'}}></div>
+          <div className="absolute bottom-20 right-10 w-28 h-28 bg-green-400 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '6s'}}></div>
+        </div>
+        
+        {/* Hero Section */}
+        <div className="relative pt-32 pb-16">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <div className="inline-flex items-center px-4 py-2 rounded-full glass border border-white/20 text-white/90 text-sm font-medium mb-8 animate-fade-in">
+              <Sparkles className="w-4 h-4 mr-2 text-yellow-400" />
+              Join our global research community
+            </div>
+            
+            <h1 className="text-6xl md:text-7xl font-black tracking-tighter mb-8">
+              <span className="bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent drop-shadow-2xl">
+                Submit Your
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent drop-shadow-2xl">
+                Research
+              </span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-white/80 leading-relaxed mb-12 max-w-3xl mx-auto">
+              Share your groundbreaking research with the APOSS community and connect with scholars worldwide.
+            </p>
+            
+            <div className="flex items-center justify-center space-x-8 mb-16">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center mb-3 mx-auto">
+                  <Globe className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-white/70 text-sm font-medium">Global Reach</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center mb-3 mx-auto">
+                  <Star className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-white/70 text-sm font-medium">Expert Review</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mb-3 mx-auto">
+                  <Award className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-white/70 text-sm font-medium">Career Boost</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Form Section */}
+        <div className="relative max-w-4xl mx-auto px-6 pb-16">
+          <Link href="/" className="inline-flex items-center glass px-4 py-2 rounded-xl text-white/90 hover:text-white font-medium mb-8 transition-all duration-300 hover:scale-105">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Submit Your Research</h1>
-          <p className="text-xl text-gray-600">
-            Share your research with the APOSS community. All fields are required unless marked optional.
-          </p>
-        </div>
 
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'} font-semibold`}>
-              1
-            </div>
-            <div className={`h-1 flex-1 ${currentStep >= 2 ? 'bg-blue-600' : 'bg-gray-200'} rounded`}></div>
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'} font-semibold`}>
-              2
-            </div>
-            <div className={`h-1 flex-1 ${currentStep >= 3 ? 'bg-blue-600' : 'bg-gray-200'} rounded`}></div>
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'} font-semibold`}>
-              3
+          {/* Progress Bar */}
+          <div className="mb-12">
+            <div className="glass rounded-2xl p-6 border border-white/20">
+              <div className="flex items-center space-x-4 mb-4">
+                <div className={`flex items-center justify-center w-12 h-12 rounded-full ${currentStep >= 1 ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' : 'bg-white/20 text-white/70'} font-bold text-lg transition-all duration-300`}>
+                  1
+                </div>
+                <div className={`h-2 flex-1 ${currentStep >= 2 ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-white/20'} rounded-full transition-all duration-300`}></div>
+                <div className={`flex items-center justify-center w-12 h-12 rounded-full ${currentStep >= 2 ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg' : 'bg-white/20 text-white/70'} font-bold text-lg transition-all duration-300`}>
+                  2
+                </div>
+                <div className={`h-2 flex-1 ${currentStep >= 3 ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-white/20'} rounded-full transition-all duration-300`}></div>
+                <div className={`flex items-center justify-center w-12 h-12 rounded-full ${currentStep >= 3 ? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg' : 'bg-white/20 text-white/70'} font-bold text-lg transition-all duration-300`}>
+                  3
+                </div>
+              </div>
+              <div className="flex justify-between text-sm text-white/90 font-medium">
+                <span>Author Info</span>
+                <span>Research Details</span>
+                <span>Review & Submit</span>
+              </div>
             </div>
           </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Author Info</span>
-            <span>Research Details</span>
-            <span>Review & Submit</span>
-          </div>
-        </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Step 1: Author Information */}
           {currentStep === 1 && (
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <div className="flex items-center mb-6">
-                <User className="w-6 h-6 text-blue-600 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Author Information</h2>
+            <div className="glass rounded-3xl shadow-elegant p-10 border border-white/20 animate-scale-in">
+              <div className="flex items-center mb-8">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-3xl font-bold text-white">Author Information</h2>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                  <label className="block text-sm font-semibold text-white/90 mb-2">Full Name</label>
                   <Input
                     value={formData.authorName}
                     onChange={(e) => handleInputChange('authorName', e.target.value)}
