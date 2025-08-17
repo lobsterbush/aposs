@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Header } from '@/components/layout/header'
 import { Calendar, Users, Globe, BookOpen, ArrowRight, Sparkles, Video, Star, ChevronDown, MapPin, Award, Zap } from 'lucide-react'
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <>
+      <Header />
+      <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background with Asia map pattern and gradient */}
@@ -415,5 +418,6 @@ export default function Home() {
         </div>
       </section>
     </div>
+    </>
   )
 }

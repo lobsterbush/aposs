@@ -218,7 +218,7 @@ export default function SubmitPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                  <label className="block text-sm font-semibold text-white/90 mb-2">Email Address</label>
                   <Input
                     type="email"
                     value={formData.authorEmail}
@@ -230,7 +230,7 @@ export default function SubmitPage() {
               </div>
               
               <div className="mt-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Institution/Affiliation</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">Institution/Affiliation</label>
                 <Input
                   value={formData.authorAffiliation}
                   onChange={(e) => handleInputChange('authorAffiliation', e.target.value)}
@@ -240,7 +240,7 @@ export default function SubmitPage() {
               </div>
               
               <div className="mt-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Brief Bio</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">Brief Bio</label>
                 <Textarea
                   value={formData.authorBio}
                   onChange={(e) => handleInputChange('authorBio', e.target.value)}
@@ -251,7 +251,7 @@ export default function SubmitPage() {
               </div>
               
               <div className="mt-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Co-Authors (Optional)</label>
+                <label className="block text-sm font-semibold text-white/90 mb-2">Co-Authors (Optional)</label>
                 <Textarea
                   value={formData.coAuthors}
                   onChange={(e) => handleInputChange('coAuthors', e.target.value)}
@@ -429,5 +429,6 @@ export default function SubmitPage() {
         </form>
       </div>
     </div>
+    </>
   )
 }
