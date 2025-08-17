@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Calendar, Users, Globe, BookOpen, ArrowRight, Sparkles, Video, Clock, Star, ChevronDown, Play, MapPin, Award, Zap } from 'lucide-react'
+import { Calendar, Users, Globe, BookOpen, ArrowRight, Sparkles, Video, Star, ChevronDown, MapPin, Award, Zap } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -29,7 +29,9 @@ export default function Home() {
           </div>
           
           {/* Grain texture overlay */}
-          <div className="absolute inset-0 opacity-30 bg-[url('data:image/svg+xml,%3Csvg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.4"/%3E%3C/svg%3E')]"></div>
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute inset-0 bg-black bg-opacity-10 mix-blend-overlay"></div>
+          </div>
         </div>
         
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
@@ -202,7 +204,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Early Career Focus</h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
-                  Graduate students and early-career researchers receive priority consideration. We're committed to 
+                  Graduate students and early-career researchers receive priority consideration. We&apos;re committed to 
                   <span className="font-semibold text-green-600">nurturing the next generation</span> of scholars.
                 </p>
                 <div className="mt-6 flex items-center text-sm text-green-600 font-medium">
@@ -245,7 +247,7 @@ export default function Home() {
               Research Excellence Criteria
             </div>
             <h2 className="text-5xl md:text-6xl font-bold tracking-tight mb-8">
-              <span className="text-gray-900">What We're</span>
+              <span className="text-gray-900">What We&apos;re</span>
               <br />
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Interested In</span>
             </h2>
@@ -401,8 +403,8 @@ export default function Home() {
           {/* Bottom testimonial or quote */}
           <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 max-w-2xl mx-auto">
             <p className="text-white/90 text-lg italic leading-relaxed">
-              "APOSS has been instrumental in connecting me with researchers across continents 
-              and providing invaluable feedback on my work."
+              &ldquo;APOSS has been instrumental in connecting me with researchers across continents 
+              and providing invaluable feedback on my work.&rdquo;
             </p>
             <div className="mt-4 flex items-center justify-center space-x-2">
               <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
