@@ -1,0 +1,152 @@
+// APOSS Database Schema
+// Asian Politics Online Seminar Series
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// === ENUMS ===
+enum SubmissionStatus {
+  PENDING
+  UNDER_REVIEW
+  ACCEPTED
+  SCHEDULED
+  PRESENTED
+  REJECTED
+}
+
+enum EventStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum UserRole {
+  ADMIN
+  ORGANIZER
+  VIEWER
+}
+
+// === MODELS ===
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(VIEWER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  events      Event[]
+  
+  @@map("users")
+}
+
+model Submission {
+  id                String           @id @default(cuid())
+  title             String
+  abstract          String
+  authorName        String
+  authorEmail       String
+  authorAffiliation String
+  authorBio         String?
+  coAuthors         String?          // JSON string of co-authors
+  
+  // Research details
+  researchField     String
+  methodology       String?
+  keywords          String           // Comma-separated keywords
+  
+  // Submission metadata
+  status            SubmissionStatus @default(PENDING)
+  submittedAt       DateTime         @default(now())
+  reviewedAt        DateTime?
+  scheduledAt       DateTime?
+  presentedAt       DateTime?
+  
+  // Admin notes
+  adminNotes        String?
+  reviewerComments  String?
+  
+  // Relations
+  eventId           String?          @unique
+  event             Event?           @relation(fields: [eventId], references: [id])
+  
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  
+  @@map("submissions")
+}
+
+model Event {
+  id              String      @id @default(cuid())
+  title           String
+  description     String?
+  
+  // Scheduling
+  scheduledAt     DateTime
+  duration        Int         @default(90) // minutes
+  timeZone        String      @default("Asia/Tokyo")
+  
+  // Zoom integration
+  zoomMeetingId   String?
+  zoomJoinUrl     String?
+  zoomStartUrl    String?
+  zoomPassword    String?
+  
+  // Event details
+  presenter       String
+  presenterEmail  String?
+  moderator       String?
+  status          EventStatus @default(SCHEDULED)
+  
+  // Relations
+  submissionId    String?     @unique
+  submission      Submission?
+  organizerId     String?
+  organizer       User?       @relation(fields: [organizerId], references: [id])
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  @@map("events")
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String
+  excerpt   String?
+  published Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("blog_posts")
+}
+
+model Settings {
+  id                    String   @id @default(cuid())
+  siteName              String   @default("APOSS")
+  siteDescription       String   @default("Asian Politics Online Seminar Series")
+  contactEmail          String   @default("contact@aposs.org")
+  submissionsOpen       Boolean  @default(true)
+  maxSubmissionsPerWeek Int      @default(1)
+  
+  // Zoom settings
+  zoomApiKey            String?
+  zoomApiSecret         String?
+  zoomWebhookSecret     String?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@map("settings")
+}
