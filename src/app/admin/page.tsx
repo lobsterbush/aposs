@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Calendar, Users, FileText, Clock, CheckCircle, X, Eye, CalendarDays, Video } from 'lucide-react'
+import { Header } from '@/components/layout/header'
 
 interface Submission {
   id: string
@@ -127,12 +128,15 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">APOSS Admin Dashboard</h1>
-          <p className="text-gray-600">Manage submissions, schedule seminars, and organize events.</p>
+      <Header />
+      <div className="relative bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2">APOSS Admin Dashboard</h1>
+          <p className="text-white/80">Manage submissions, schedule seminars, and organize events.</p>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Tabs */}
 
         {/* Tab Navigation */}
         <div className="border-b border-gray-200 mb-8">
@@ -327,16 +331,15 @@ export default function AdminPage() {
               <div className="divide-y divide-gray-200">
                 {events.map((event) => (
                   <div key={event.id} className="p-6">
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                       <div className="flex-1">
                         <h3 className="text-lg font-medium text-gray-900 mb-2">{event.title}</h3>
                         <div className="text-sm text-gray-600 space-y-1">
                           <p><strong>Presenter:</strong> {event.presenter}</p>
                           <p><strong>Date & Time:</strong> {new Date(event.scheduledAt).toLocaleString()}</p>
                           {event.zoomJoinUrl && (
-                            <p><strong>Zoom Link:</strong> 
-                              <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" 
-                                 className="text-blue-600 hover:text-blue-700 ml-1">
+                            <p><strong>Zoom Link:</strong>
+                              <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 ml-1">
                                 Join Meeting
                               </a>
                             </p>
@@ -346,6 +349,55 @@ export default function AdminPage() {
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(event.status)}`}>
                             {event.status}
                           </span>
+                        </div>
+                      </div>
+                      {/* Admin controls */}
+                      <div className="w-full lg:w-96 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div className="space-y-3">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Reschedule (Date & Time)
+                          </label>
+                          <Input
+                            type="datetime-local"
+                            defaultValue={new Date(event.scheduledAt).toISOString().slice(0,16)}
+                            onChange={async (e) => {
+                              const val = e.target.value
+                              if (!val) return
+                              try {
+                                await fetch(`/api/events/${event.id}`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ scheduledAt: val })
+                                })
+                                fetchEvents()
+                              } catch (err) {
+                                console.error('Failed to update event time', err)
+                              }
+                            }}
+                            className="text-sm"
+                          />
+                          <label className="block text-sm font-medium text-gray-700 mt-4">
+                            Zoom Join URL
+                          </label>
+                          <Input
+                            type="url"
+                            defaultValue={event.zoomJoinUrl || ''}
+                            placeholder="https://zoom.us/j/xxxx"
+                            onBlur={async (e) => {
+                              const url = e.target.value
+                              try {
+                                await fetch(`/api/events/${event.id}`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ zoomJoinUrl: url })
+                                })
+                                fetchEvents()
+                              } catch (err) {
+                                console.error('Failed to update zoom link', err)
+                              }
+                            }}
+                            className="text-sm"
+                          />
                         </div>
                       </div>
                     </div>

@@ -1,31 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* APOSS Brand Colors */
+/* Modern APOSS Brand System */
 :root {
-  /* Primary Brand Colors */
-  --aposs-navy: #1a365d;
-  --aposs-blue: #3182ce;
-  --aposs-red: #e53e3e;
-  --aposs-orange: #fd7f3d;
+  /* Core Brand Colors */
+  --aposs-navy: #0a1628;
+  --aposs-blue: #1e40af;
+  --aposs-light-blue: #3b82f6;
+  --aposs-red: #dc2626;
+  --aposs-orange: #ea580c;
   
-  /* Neutral Colors */
+  /* Modern Neutrals */
   --aposs-white: #ffffff;
-  --aposs-gray-50: #f7fafc;
-  --aposs-gray-100: #edf2f7;
-  --aposs-gray-200: #e2e8f0;
-  --aposs-gray-300: #cbd5e0;
-  --aposs-gray-400: #a0aec0;
-  --aposs-gray-500: #718096;
-  --aposs-gray-600: #4a5568;
-  --aposs-gray-700: #2d3748;
-  --aposs-gray-800: #1a202c;
-  --aposs-gray-900: #171923;
+  --aposs-gray-50: #f8fafc;
+  --aposs-gray-100: #f1f5f9;
+  --aposs-gray-900: #0f172a;
   
-  /* Accent Colors */
-  --aposs-gradient-start: var(--aposs-blue);
-  --aposs-gradient-end: var(--aposs-navy);
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #0a1628 100%);
+  --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  --gradient-warm: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
 }
 
 /* Custom fonts and base styles */
@@ -246,6 +239,11 @@ html {
 ::selection {
   background: rgba(59, 130, 246, 0.2);
   color: inherit;
+}
+
+/* Enhanced shadow utilities */
+.shadow-elegant {
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Enhanced transitions for better UX */

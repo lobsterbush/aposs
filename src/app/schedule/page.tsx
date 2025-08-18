@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Calendar, Clock, User, ArrowLeft, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Header } from '@/components/layout/header'
 
 interface Event {
   id: string
@@ -69,10 +70,13 @@ export default function SchedulePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading schedule...</p>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center pt-28 pb-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading schedule...</p>
+          </div>
         </div>
       </div>
     )
@@ -80,18 +84,20 @@ export default function SchedulePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="mb-8">
-          <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Link>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">APOSS Schedule</h1>
-          <p className="text-xl text-gray-600">
+      <Header />
+      <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+        <div className="mx-auto max-w-4xl px-6 py-16">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">APOSS Schedule</h1>
+          <p className="text-white/90 text-lg max-w-3xl">
             Join us for engaging seminars on Asian politics. All seminars are conducted online via Zoom.
           </p>
+          <div className="mt-6 inline-flex items-center px-4 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
+            <Calendar className="w-4 h-4 mr-2" />
+            Upcoming and past events
+          </div>
         </div>
+      </div>
+      <div className="max-w-4xl mx-auto px-6 py-12">
 
         {/* Upcoming Events */}
         <div className="mb-12">

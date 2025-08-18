@@ -2,106 +2,142 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/layout/header'
-import { Calendar, Users, Globe, BookOpen, ArrowRight, Video, Star, MapPin, Award, Zap, Play, Clock, CheckCircle, Sparkles } from 'lucide-react'
+import { Calendar, Users, Globe, BookOpen, ArrowRight, Video, Star, Award, Zap, Upload, Sparkles, TrendingUp, Users2 } from 'lucide-react'
 
 export default function Home() {
   return (
     <>
       <Header />
-      <div className="flex flex-col pt-20">
+      <main className="pt-20">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-50 via-white to-gray-50 overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-20 right-20 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
-          <div className="absolute bottom-20 left-20 w-80 h-80 bg-gray-100 rounded-full mix-blend-multiply filter blur-xl animate-float" style={{animationDelay: '3s'}}></div>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+        {/* Background using APOSS header image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/branding/Website Header Image ht 2000px.png"
+            alt="APOSS Background"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-purple-900/80"></div>
+          <div className="absolute inset-0 bg-black/20"></div>
         </div>
         
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233182ce' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-          }}></div>
+        {/* Animated floating elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full backdrop-blur-sm animate-float"></div>
+          <div className="absolute bottom-32 right-20 w-24 h-24 bg-blue-300/20 rounded-full backdrop-blur-sm animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 left-10 w-16 h-16 bg-orange-400/20 rounded-full backdrop-blur-sm animate-float" style={{animationDelay: '4s'}}></div>
         </div>
         
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          {/* Hero Logo and Title */}
-          <div className="mb-12">
-            <div className="flex justify-center mb-8">
-              <div className="relative w-24 h-24">
+          {/* Impact Statement */}
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-bold mb-8 animate-fade-in">
+            <TrendingUp className="w-4 h-4 mr-2 text-orange-400" />
+            <span>Connecting 1000+ researchers across 50+ countries</span>
+          </div>
+          
+          {/* Main Hero Content */}
+          <div className="mb-16">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 leading-none">
+              <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-2xl">
+                ADVANCING
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
+                ASIAN POLITICS
+              </span>
+              <br />
+              <span className="text-white drop-shadow-2xl text-5xl md:text-6xl lg:text-7xl">
+                RESEARCH
+              </span>
+            </h1>
+            
+            {/* Divider with brand elements */}
+            <div className="flex items-center justify-center space-x-4 mb-8">
+              <div className="h-1 w-16 bg-gradient-to-r from-transparent to-white/50 rounded"></div>
+              <div className="relative w-12 h-12 p-2 bg-white/10 rounded-full backdrop-blur-sm border border-white/20">
                 <Image
                   src="/branding/Blue Logo ht 2000px.png"
                   alt="APOSS Logo"
-                  width={96}
-                  height={96}
-                  className="object-contain"
-                  priority
+                  width={32}
+                  height={32}
+                  className="object-contain filter brightness-0 invert"
                 />
               </div>
+              <div className="h-1 w-16 bg-gradient-to-l from-transparent to-white/50 rounded"></div>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900">
-              Asian Politics Online
-              <br />
-              <span className="text-blue-600">Seminar Series</span>
-            </h1>
-            <div className="h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
+            
+            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto mb-12 leading-relaxed font-medium">
+              The premier online seminar series connecting political scientists worldwide to advance 
+              understanding of Asian politics through <span className="text-orange-300 font-bold">collaborative research</span> and 
+              <span className="text-blue-300 font-bold">scholarly excellence</span>.
+            </p>
           </div>
           
-          {/* Professional tagline */}
-          <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto mb-12 leading-relaxed">
-            Connecting political scientists worldwide to advance our understanding of Asian politics 
-            through collaborative research and scholarly exchange.
-          </p>
-          
-          {/* Achievement badge */}
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-12">
-            <CheckCircle className="w-4 h-4 mr-2" />
-            Over 100 seminars hosted worldwide since 2020
-          </div>
-          
-          {/* CTA section */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+          {/* Bold CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
+            <Button asChild size="lg" className="group bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold px-10 py-6 text-xl rounded-2xl shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 border-0 transform hover:scale-105">
               <Link href="/submit">
                 <span className="flex items-center">
-                  Submit Research Proposal
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <Upload className="mr-3 h-6 w-6" />
+                  Submit Research
+                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </span>
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-lg">
+            <Button asChild variant="outline" size="lg" className="group border-3 border-white text-white hover:bg-white hover:text-blue-900 font-bold px-10 py-6 text-xl rounded-2xl backdrop-blur-md transition-all duration-300 transform hover:scale-105">
               <Link href="/schedule">
                 <span className="flex items-center">
-                  <Calendar className="mr-2 h-5 w-5" />
+                  <Calendar className="mr-3 h-6 w-6" />
                   View Schedule
+                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </span>
               </Link>
             </Button>
           </div>
           
-          {/* Stats with better visual hierarchy */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
-                <Video className="w-8 h-8 text-white" />
+          {/* Impact Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="group">
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl">
+                  <Video className="w-10 h-10 text-white" />
+                </div>
+                <div className="text-5xl font-black text-white mb-3">100+</div>
+                <div className="text-white/80 font-semibold text-lg">Seminars Hosted</div>
+                <div className="text-white/60 text-sm mt-2">Since 2020</div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">100+</div>
-              <div className="text-gray-600 font-medium">Seminars Hosted</div>
             </div>
-            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
-                <MapPin className="w-8 h-8 text-white" />
+            <div className="group">
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+                  <Globe className="w-10 h-10 text-white" />
+                </div>
+                <div className="text-5xl font-black text-white mb-3">50+</div>
+                <div className="text-white/80 font-semibold text-lg">Countries</div>
+                <div className="text-white/60 text-sm mt-2">Represented</div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">50+</div>
-              <div className="text-gray-600 font-medium">Countries Represented</div>
             </div>
-            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
-                <Users className="w-8 h-8 text-white" />
+            <div className="group">
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 transform group-hover:scale-105">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-orange-400 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+                  <Users2 className="w-10 h-10 text-white" />
+                </div>
+                <div className="text-5xl font-black text-white mb-3">1000+</div>
+                <div className="text-white/80 font-semibold text-lg">Researchers</div>
+                <div className="text-white/60 text-sm mt-2">Connected</div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">1000+</div>
-              <div className="text-gray-600 font-medium">Researchers Connected</div>
             </div>
+          </div>
+        </div>
+        
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/70 animate-bounce">
+          <div className="flex flex-col items-center">
+            <span className="text-sm font-medium mb-2">Explore More</span>
+            <ArrowRight className="h-6 w-6 rotate-90" />
           </div>
         </div>
       </section>
@@ -390,7 +426,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+      </main>
     </>
   )
 }
