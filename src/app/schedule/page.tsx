@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Calendar, Clock, User, ArrowLeft, ExternalLink } from 'lucide-react'
+import { Calendar, Clock, User, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/layout/header'
 
@@ -20,8 +20,6 @@ interface Event {
 export default function SchedulePage() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
 
   useEffect(() => {
     fetchEvents()
@@ -74,7 +72,7 @@ export default function SchedulePage() {
         <Header />
         <div className="flex items-center justify-center pt-28 pb-12">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-[#00376c]/20 border-t-[#00376c] mx-auto mb-4"></div>
             <p className="text-gray-600">Loading schedule...</p>
           </div>
         </div>
@@ -85,7 +83,7 @@ export default function SchedulePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+      <div className="relative bg-gradient-to-r from-[#17152b] to-[#00376c] text-white on-brand-navy">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">APOSS Schedule</h1>
           <p className="text-white/90 text-lg max-w-3xl">
@@ -99,31 +97,36 @@ export default function SchedulePage() {
       </div>
       <div className="max-w-4xl mx-auto px-6 py-12">
 
+        {/* Info Note per Notion */}
+        <div className="mb-6 rounded-xl bg-[#00376c]/5 border border-[#00376c]/10 p-4 text-sm text-[#00376c]">
+          Times are presented in JST by default for historical reasons. Sessions featuring European scholars may be shown in EST for convenience. Registration is required for all sessions.
+        </div>
+
         {/* Upcoming Events */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            <Calendar className="w-6 h-6 mr-2 text-blue-600" />
+<Calendar className="w-6 h-6 mr-2 text-slate-700" />
             Upcoming Seminars
           </h2>
           
           {upcomingEvents.length > 0 ? (
             <div className="space-y-6">
               {upcomingEvents.map((event) => (
-                <div key={event.id} className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+                <div key={event.id} className="bg-white rounded-xl shadow-md p-6 border-l-4 border-[#00376c] hover:shadow-lg transition-shadow">
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1">
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">{event.title}</h3>
                       <div className="space-y-2 text-sm text-gray-600">
                         <div className="flex items-center">
-                          <User className="w-4 h-4 mr-2 text-blue-500" />
+<User className="w-4 h-4 mr-2 text-slate-700" />
                           <span><strong>Presenter:</strong> {event.presenter}</span>
                         </div>
                         <div className="flex items-center">
-                          <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+<Calendar className="w-4 h-4 mr-2 text-slate-700" />
                           <span><strong>Date:</strong> {formatDate(event.scheduledAt)}</span>
                         </div>
                         <div className="flex items-center">
-                          <Clock className="w-4 h-4 mr-2 text-blue-500" />
+<Clock className="w-4 h-4 mr-2 text-slate-700" />
                           <span><strong>Time:</strong> {formatTime(event.scheduledAt)}</span>
                         </div>
                       </div>
@@ -133,14 +136,14 @@ export default function SchedulePage() {
                     </div>
                     <div className="mt-4 lg:mt-0 lg:ml-6">
                       {event.zoomJoinUrl ? (
-                        <Button asChild>
-                          <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer">
+<Button asChild>
+                          <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" className="no-underline text-white inline-flex items-center">
                             Join Meeting
                             <ExternalLink className="w-4 h-4 ml-2" />
                           </a>
                         </Button>
                       ) : (
-                        <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-[#00376c]/10 text-[#00376c]">
                           Meeting Link TBA
                         </span>
                       )}
@@ -198,13 +201,13 @@ export default function SchedulePage() {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 text-center bg-blue-600 rounded-xl p-8">
+        <div className="mt-12 text-center bg-[#00376c] rounded-xl p-8">
           <h3 className="text-2xl font-bold text-white mb-4">Want to Present?</h3>
-          <p className="text-blue-100 mb-6">
+          <p className="text-white/80 mb-6">
             Share your research with the APOSS community. Submit your proposal today!
           </p>
-          <Button asChild size="lg" variant="secondary">
-            <Link href="/submit">Submit Your Proposal</Link>
+          <Button asChild size="lg" variant="default">
+            <Link href="/submit" className="no-underline text-white">Submit Your Proposal</Link>
           </Button>
         </div>
       </div>

@@ -1,11 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import type { Prisma } from '@prisma/client'
 
 export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: any
 ) {
-  const { id } = params
+  const { id } = context.params
   try {
     const data = await request.json()
     const { zoomJoinUrl, scheduledAt, status } = data as {
@@ -14,7 +16,7 @@ export async function PATCH(
       status?: 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'
     }
 
-    const updateData: any = {}
+    const updateData: Prisma.EventUpdateInput = {}
     if (typeof zoomJoinUrl !== 'undefined') updateData.zoomJoinUrl = zoomJoinUrl || null
     if (typeof scheduledAt !== 'undefined') updateData.scheduledAt = new Date(scheduledAt)
     if (typeof status !== 'undefined') updateData.status = status

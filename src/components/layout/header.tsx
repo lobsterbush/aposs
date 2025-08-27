@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Image from 'next/image'
-import { Menu, X, Home, Calendar, Upload, Settings, ArrowRight } from 'lucide-react'
+import { Menu, X, Home, Calendar, Upload, Settings, ArrowRight, Users, BookOpen } from 'lucide-react'
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 export function Header() {
   const pathname = usePathname()
@@ -13,58 +13,44 @@ export function Header() {
   const navigation = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Schedule', href: '/schedule', icon: Calendar },
-    { name: 'Submit', href: '/submit', icon: Upload },
-    { name: 'Admin', href: '/admin', icon: Settings },
+    { name: 'Register', href: '/register', icon: Upload },
+    { name: 'Organizers', href: '/organizers', icon: Users },
+    { name: 'Guidelines', href: '/guidelines', icon: BookOpen },
+    { name: 'Presenters', href: '/presenters', icon: Home },
+    { name: 'Supporters', href: '/supporters', icon: Home },
+    { name: 'About', href: '/about', icon: Home },
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 backdrop-blur-md"></div>
-      <div className="absolute inset-0 bg-black/20"></div>
-      
-      <div className="relative max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-24">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-4 group">
-            <div className="relative w-16 h-16 p-2 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-all duration-300">
-              <Image
-                src="/branding/Blue Logo ht 2000px.png"
-                alt="APOSS Logo"
-                width={48}
-                height={48}
-                className="object-contain filter brightness-0 invert"
-                priority
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-black text-white leading-tight tracking-tight">
-                APOSS
-              </span>
-              <span className="text-sm text-white/80 font-medium leading-tight">
-                Asian Politics Online Seminar Series
-              </span>
-            </div>
+    <header className="fixed top-0 left-0 right-0 z-[100]">
+      {/* Flat header background */}
+      <div className="absolute inset-0 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-b border-slate-200 pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-6 z-10">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo - Simple text logo for header */}
+          <Link href="/" className="flex items-center no-underline group">
+            <span className="text-2xl font-bold text-[#17152b] group-hover:text-[#00376c] transition-colors">
+              APOSS
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+<nav className="hidden md:flex items-center space-x-1">
             {navigation.map((item) => {
-              const Icon = item.icon
               const isActive = pathname === item.href
-              
+
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`group relative px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+className={`group relative px-4 py-2 rounded-md font-medium text-sm transition-colors no-underline ${
                     isActive
-                      ? 'bg-white text-blue-900 shadow-xl'
-                      : 'text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-sm'
+                      ? 'text-[#17152b] font-semibold'
+                      : 'text-slate-700 hover:text-[#00376c]'
                   }`}
                 >
                   <div className="flex items-center space-x-2">
-                    <Icon className="w-4 h-4" />
                     <span>{item.name}</span>
                     {!isActive && <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />}
                   </div>
@@ -73,46 +59,50 @@ export function Header() {
             })}
           </nav>
 
-          {/* CTA Button */}
-          <Link 
-            href="/submit" 
-            className="hidden md:flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            <Upload className="w-4 h-4" />
-            <span>Submit Research</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+{/* CTA Button */}
+<div className="hidden md:flex items-center space-x-3">
+            <Button asChild variant="default" size="default">
+              <Link href="/submit" className="no-underline text-white">
+                <Upload className="w-4 h-4" />
+                Submit
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="default">
+              <Link href="/admin" className="no-underline">
+                <Settings className="w-4 h-4" />
+                Admin
+              </Link>
+            </Button>
+          </div>
 
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+            className="md:hidden p-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200 transition-colors relative z-20"
           >
             {isMobileMenuOpen ? (
-              <X className="w-5 h-5 text-white" />
+              <X className="w-5 h-5" />
             ) : (
-              <Menu className="w-5 h-5 text-white" />
+              <Menu className="w-5 h-5" />
             )}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100 py-4">
+          <div className="md:hidden border-t border-slate-200 py-4 bg-white/95 backdrop-blur-md">
             <nav className="space-y-2">
               {navigation.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href
-                
+
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
-                      isActive
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
+                      isActive ? 'bg-gray-100 text-slate-900' : 'text-slate-800 hover:bg-slate-100'
                     }`}
                   >
                     <Icon className="w-5 h-5" />

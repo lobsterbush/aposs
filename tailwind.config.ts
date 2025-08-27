@@ -9,29 +9,47 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        aposs: {
+          navy: "#0a1628",
+          blue: {
+            DEFAULT: "#1e3a8a", // APOSS blue
+            600: "#1e40af",
+            500: "#2563eb",
+          },
+          white: "#ffffff",
+          slate: {
+            50: "#f8fafc",
+            100: "#f1f5f9",
+            200: "#e2e8f0",
+            600: "#475569",
+            700: "#334155",
+            900: "#0f172a",
+          },
+        },
+        // Semantic aliases tied to APOSS palette
         primary: {
-          DEFAULT: "#3b82f6", // blue-500
+          DEFAULT: "#1e3a8a",
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#f1f5f9", // slate-100
-          foreground: "#0f172a", // slate-900
+          DEFAULT: "#f1f5f9",
+          foreground: "#0f172a",
         },
         muted: {
-          DEFAULT: "#f8fafc", // slate-50
-          foreground: "#64748b", // slate-500
+          DEFAULT: "#f8fafc",
+          foreground: "#64748b",
         },
         accent: {
-          DEFAULT: "#f1f5f9", // slate-100
-          foreground: "#0f172a", // slate-900
+          DEFAULT: "#f1f5f9",
+          foreground: "#0f172a",
         },
         destructive: {
-          DEFAULT: "#ef4444", // red-500
+          DEFAULT: "#ef4444",
           foreground: "#ffffff",
         },
-        border: "#e2e8f0", // slate-200
-        input: "#e2e8f0", // slate-200
-        ring: "#3b82f6", // blue-500
+        border: "#e2e8f0",
+        input: "#e2e8f0",
+        ring: "#1e3a8a",
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

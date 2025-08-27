@@ -1,0 +1,15 @@
+{
+  "name": "APOSS - Asian Politics Online Seminar Series",
+  "short_name": "APOSS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "/branding/Drop logo ht 2000px.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

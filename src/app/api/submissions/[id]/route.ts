@@ -1,14 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 
 export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: any
 ) {
-  const { id } = params
+  const { id } = context.params
   try {
     const data = await request.json()
-    const { status } = data
+    const { status } = data as { status: 'PENDING' | 'UNDER_REVIEW' | 'ACCEPTED' | 'SCHEDULED' | 'PRESENTED' | 'REJECTED' }
 
     const submission = await prisma.submission.update({
       where: { id },
@@ -34,10 +35,10 @@ export async function PATCH(
 }
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: any
 ) {
-  const { id } = params
+  const { id } = context.params
   try {
     const submission = await prisma.submission.findUnique({
       where: { id },

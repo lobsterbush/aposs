@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Configure Prisma db seed to use our seed script
+// This block is supported by Prisma to locate the seed command
+// https://www.prisma.io/docs/guides/migrate/seed-database
+// For Node ESM .mjs we can call `node prisma/seed.mjs`
+
 // === ENUMS ===
 enum SubmissionStatus {
   PENDING
