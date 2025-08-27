@@ -1,0 +1,47 @@
+name: Deploy Prisma Migrations
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prisma-migrate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    name: Run prisma migrate deploy
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      PRISMA_HIDE_UPDATE_MESSAGE: "true"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check DATABASE_URL is configured
+        run: |
+          if [ -z "${DATABASE_URL:-}" ]; then
+            echo "DATABASE_URL secret is not set. Add it in GitHub → Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies (prod only)
+        run: npm ci --omit=dev
+
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy --schema=prisma/schema.prisma
+
+      - name: Show migration status
+        run: npx prisma migrate status --schema=prisma/schema.prisma
+
