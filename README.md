@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# APOSS - Asian Politics Online Seminar Series
 
-## Getting Started
+A Next.js application for managing academic seminar submissions, scheduling, and event coordination.
 
-First, run the development server:
+## 🎯 Features
+
+- **Paper Submission System** - Multi-step form with PDF upload
+- **Email Notifications** - Automated confirmations and status updates
+- **Admin Dashboard** - Review submissions, schedule events, manage calendar
+- **Magic Link Authentication** - Secure, passwordless admin login
+- **Event Management** - Schedule seminars, manage Zoom links, public calendar
+- **Responsive Design** - Professional UI built with Tailwind CSS
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 20+
+- npm or yarn
+- PostgreSQL (production) or SQLite (development)
+
+### Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env.local
+
+# Set up database
+npx prisma generate
+npx prisma migrate dev
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📖 Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **[SETUP.md](SETUP.md)** - Complete setup and deployment guide
+- **[ROLLOUT_PLAN.md](ROLLOUT_PLAN.md)** - Detailed implementation roadmap
+- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - What's been built
 
-## Learn More
+## 🔧 Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL (Prisma ORM)
+- **Authentication:** NextAuth.js (Email Magic Links)
+- **Email:** Resend
+- **File Storage:** Vercel Blob
+- **Styling:** Tailwind CSS 4
+- **UI Components:** Radix UI
+- **Deployment:** Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📦 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── submit/          # Paper submission form
+│   ├── admin/           # Admin dashboard
+│   ├── schedule/        # Event calendar
+│   ├── login/           # Authentication
+│   └── api/             # API routes
+├── components/          # Reusable UI components
+└── lib/
+    ├── email.ts         # Email service
+    └── email-templates/ # HTML templates
+```
 
-## Deploy on Vercel
+## 🌐 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See [SETUP.md](SETUP.md) for detailed deployment instructions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Quick Deploy to Vercel:**
+
+1. Push to GitHub
+2. Import repository in Vercel
+3. Add environment variables
+4. Deploy
+
+## 🔐 Environment Variables
+
+Required for production:
+
+```bash
+DATABASE_URL=postgresql://...
+NEXTAUTH_SECRET=<generate-with-openssl>
+NEXTAUTH_URL=https://yourdomain.com
+RESEND_API_KEY=re_xxxxx
+EMAIL_FROM=APOSS <notifications@aposs.org>
+ADMIN_EMAIL=admin@example.com
+SMTP_HOST=smtp.resend.com
+SMTP_PORT=465
+BLOB_READ_WRITE_TOKEN=vercel_blob_xxxxx
+```
+
+See `.env.example` for complete list.
+
+## 📝 License
+
+This project is for academic use. Please ensure compliance with your institution's policies.
+
+## 🤝 Contributing
+
+This is an internal project for APOSS. For questions or issues, contact the organizers.
+
+## 📧 Contact
+
+- **General Inquiries:** contact@aposs.org
+- **Organizers:** Charles Crabtree & Trevor Incerti
+
+---
+
+**Built with Next.js 15** | **Powered by Vercel**

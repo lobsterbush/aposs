@@ -27,6 +27,11 @@ interface SubmissionData {
   isPublished: boolean
   presentationPreference: string
   availabilityNotes: string
+  
+  // Paper upload
+  paperUrl?: string
+  paperFileName?: string
+  paperFileSize?: number
 }
 
 export default function SubmitPage() {
@@ -48,9 +53,66 @@ export default function SubmitPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
+  const [file, setFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
 
   const handleInputChange = (field: keyof SubmissionData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0]
+    if (!selectedFile) return
+    
+    setUploadError(null)
+    
+    // Validate file type
+    if (!selectedFile.name.toLowerCase().endsWith('.pdf')) {
+      setUploadError('Only PDF files are allowed')
+      return
+    }
+    
+    // Validate file size (25MB max)
+    if (selectedFile.size > 25 * 1024 * 1024) {
+      setUploadError('File size must be less than 25MB')
+      return
+    }
+    
+    setFile(selectedFile)
+  }
+
+  const uploadPaper = async () => {
+    if (!file) return null
+    
+    setUploading(true)
+    setUploadError(null)
+    try {
+      const response = await fetch(
+        `/api/upload?filename=${encodeURIComponent(file.name)}`,
+        {
+          method: 'POST',
+          body: file,
+        }
+      )
+      const result = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Upload failed')
+      }
+      
+      return {
+        url: result.url,
+        filename: result.filename,
+        size: result.size
+      }
+    } catch (error) {
+      console.error('Upload failed:', error)
+      setUploadError(error instanceof Error ? error.message : 'Upload failed')
+      return null
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,10 +120,26 @@ export default function SubmitPage() {
     setIsSubmitting(true)
     
     try {
+      // Upload paper if provided
+      let paperData = {}
+      if (file) {
+        const uploadResult = await uploadPaper()
+        if (!uploadResult) {
+          setIsSubmitting(false)
+          return
+        }
+        paperData = {
+          paperUrl: uploadResult.url,
+          paperFileName: uploadResult.filename,
+          paperFileSize: uploadResult.size,
+          paperUploadedAt: new Date().toISOString()
+        }
+      }
+      
       const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, ...paperData })
       })
       
       if (response.ok) {
@@ -338,6 +416,29 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                 </div>
                 
                 <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Paper (Optional)</label>
+                  <p className="text-sm text-gray-600 mb-2">You can upload your paper now or send it later. PDF only, max 25MB.</p>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#00376c] file:text-white hover:file:bg-[#17152b] cursor-pointer"
+                  />
+                  {file && (
+                    <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-sm text-green-800">
+                        ✓ Selected: <strong>{file.name}</strong> ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      </p>
+                    </div>
+                  )}
+                  {uploadError && (
+                    <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-sm text-red-800">{uploadError}</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Notes</label>
                   <Textarea
                     value={formData.availabilityNotes}
@@ -411,10 +512,10 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                 <Button 
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || uploading}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Proposal'}
-                  <Send className="w-4 h-4 ml-2" />
+                  {uploading ? 'Uploading paper...' : isSubmitting ? 'Submitting...' : 'Submit Proposal'}
+                  {!uploading && !isSubmitting && <Send className="w-4 h-4 ml-2" />}
                 </Button>
               </div>
             </div>

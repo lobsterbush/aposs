@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { sendEmail } from '@/lib/email'
+import { generateStatusUpdateEmail } from '@/lib/email-templates/status-update'
 
 export async function PATCH(
   request: Request,
@@ -9,15 +11,55 @@ export async function PATCH(
   const { id } = context.params
   try {
     const data = await request.json()
-    const { status } = data as { status: 'PENDING' | 'UNDER_REVIEW' | 'ACCEPTED' | 'SCHEDULED' | 'PRESENTED' | 'REJECTED' }
+    const { status, reviewerComments } = data as { 
+      status: 'PENDING' | 'UNDER_REVIEW' | 'ACCEPTED' | 'SCHEDULED' | 'PRESENTED' | 'REJECTED'
+      reviewerComments?: string
+    }
 
     const submission = await prisma.submission.update({
       where: { id },
       data: {
         status,
-        reviewedAt: ['ACCEPTED', 'REJECTED'].includes(status) ? new Date() : undefined
+        reviewedAt: ['ACCEPTED', 'REJECTED'].includes(status) ? new Date() : undefined,
+        reviewerComments: reviewerComments || undefined
+      },
+      include: {
+        event: true
       }
     })
+
+    // Send status update email for relevant status changes
+    if (['UNDER_REVIEW', 'ACCEPTED', 'REJECTED', 'SCHEDULED'].includes(status)) {
+      const statusUpdateHtml = generateStatusUpdateEmail({
+        authorName: submission.authorName,
+        title: submission.title,
+        status: status as 'UNDER_REVIEW' | 'ACCEPTED' | 'REJECTED' | 'SCHEDULED',
+        reviewerComments: submission.reviewerComments || undefined,
+        scheduledAt: submission.event?.scheduledAt
+      })
+      
+      let emailSubject = ''
+      switch (status) {
+        case 'UNDER_REVIEW':
+          emailSubject = 'Your APOSS submission is under review'
+          break
+        case 'ACCEPTED':
+          emailSubject = 'Your APOSS submission has been accepted!'
+          break
+        case 'REJECTED':
+          emailSubject = 'Update on your APOSS submission'
+          break
+        case 'SCHEDULED':
+          emailSubject = 'Your APOSS presentation is scheduled!'
+          break
+      }
+      
+      await sendEmail({
+        to: submission.authorEmail,
+        subject: emailSubject,
+        html: statusUpdateHtml
+      })
+    }
 
     return NextResponse.json({ 
       success: true, 

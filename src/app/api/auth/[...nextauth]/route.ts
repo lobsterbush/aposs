@@ -1,58 +1,81 @@
 import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import EmailProvider from "next-auth/providers/email"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import type { JWT } from "next-auth/jwt"
 import type { Session } from "next-auth"
 import { prisma } from "@/lib/db"
 
-// Minimal NextAuth config using a single admin account from env
-// Set ADMIN_EMAIL and ADMIN_PASSWORD in your environment.
+// Get admin emails from environment
+function getAdminEmails(): string[] {
+  const adminEmail = process.env.ADMIN_EMAIL || ''
+  return adminEmail.split(',').map(email => email.trim().toLowerCase()).filter(Boolean)
+}
+
 const handler = NextAuth({
+  adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const adminEmail = process.env.ADMIN_EMAIL
-        const adminPassword = process.env.ADMIN_PASSWORD
-        if (!credentials?.email || !credentials?.password) return null
-        if (!adminEmail || !adminPassword) return null
-
-        if (
-          credentials.email.toLowerCase() === adminEmail.toLowerCase() &&
-          credentials.password === adminPassword
-        ) {
-          // Ensure an admin user exists in DB for potential relations
-          const user = await prisma.user.upsert({
-            where: { email: adminEmail },
-            update: { role: "ADMIN" },
-            create: { email: adminEmail, role: "ADMIN", name: "APOSS Admin" },
-          })
-          return { id: user.id, email: user.email, name: user.name, role: user.role }
+    EmailProvider({
+      server: {
+        host: process.env.SMTP_HOST || 'smtp.resend.com',
+        port: parseInt(process.env.SMTP_PORT || '465'),
+        auth: {
+          user: 'resend',
+          pass: process.env.RESEND_API_KEY || ''
         }
-        return null
       },
+      from: process.env.EMAIL_FROM || 'APOSS <auth@aposs.org>',
     }),
   ],
   callbacks: {
+    async signIn({ user }) {
+      // Only allow admin emails to sign in
+      const adminEmails = getAdminEmails()
+      const userEmail = user.email?.toLowerCase()
+      
+      if (!userEmail || !adminEmails.includes(userEmail)) {
+        console.log(`Sign-in attempt blocked for non-admin email: ${userEmail}`)
+        return false
+      }
+      
+      // Ensure user exists in DB with ADMIN role
+      await prisma.user.upsert({
+        where: { email: userEmail },
+        update: { role: "ADMIN" },
+        create: { 
+          email: userEmail, 
+          role: "ADMIN", 
+          name: user.name || userEmail.split('@')[0]
+        },
+      })
+      
+      return true
+    },
     async jwt({ token, user }: { token: JWT; user?: import('next-auth').User | import('next-auth/adapters').AdapterUser | null }) {
       const t = token as JWT & { role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER' }
+      
+      // Set role from database or default to ADMIN for whitelisted users
       if (user) {
-        const u = user as unknown as { role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER' }
-        t.role = u.role ?? t.role ?? 'VIEWER'
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email! }
+        })
+        t.role = dbUser?.role || 'ADMIN'
       }
+      
       return t
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       const t = token as JWT & { role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER' }
       if (session.user) {
-        (session.user as unknown as { role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER' }).role = t.role ?? 'VIEWER'
+        (session.user as unknown as { role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER' }).role = t.role ?? 'ADMIN'
       }
       return session
     },
+  },
+  pages: {
+    signIn: '/login',
+    verifyRequest: '/login?verify=true',
+    error: '/login',
   },
 })
 

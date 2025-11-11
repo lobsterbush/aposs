@@ -18,6 +18,8 @@ interface Submission {
   submittedAt: string
   reviewedAt?: string
   scheduledAt?: string
+  paperUrl?: string
+  paperFileName?: string
 }
 
 interface Event {
@@ -228,6 +230,19 @@ export default function AdminPage() {
                           <p><strong>Email:</strong> {submission.authorEmail}</p>
                           <p><strong>Affiliation:</strong> {submission.authorAffiliation}</p>
                           <p><strong>Submitted:</strong> {new Date(submission.submittedAt).toLocaleDateString()}</p>
+                          {submission.paperUrl && (
+                            <p>
+                              <strong>Paper:</strong>{' '}
+                              <a 
+                                href={submission.paperUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-[#00376c] hover:underline"
+                              >
+                                Download PDF
+                              </a>
+                            </p>
+                          )}
                         </div>
                         <div className="mt-3">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(submission.status)}`}>

@@ -10,34 +10,78 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/admin'
+  const verify = searchParams.get('verify')
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const res = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-      callbackUrl,
-    })
-    setLoading(false)
-    if (res?.error) {
-      setError('Invalid email or password')
-      return
+    
+    try {
+      const res = await signIn('email', {
+        email,
+        callbackUrl,
+        redirect: false,
+      })
+      
+      if (res?.error) {
+        setError('Failed to send login link. Please check your email address.')
+      } else {
+        setEmailSent(true)
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
     }
-    router.push(callbackUrl)
+  }
+  
+  if (verify) {
+    return (
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Check your email</h1>
+        <p className="text-gray-600">A sign-in link has been sent to your email address.</p>
+      </div>
+    )
+  }
+  
+  if (emailSent) {
+    return (
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center">
+        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Check your email</h1>
+        <p className="text-gray-600 mb-6">
+          We sent a sign-in link to <strong>{email}</strong>.<br />
+          Click the link in the email to sign in.
+        </p>
+        <button 
+          onClick={() => setEmailSent(false)}
+          className="text-sm text-[#00376c] hover:underline"
+        >
+          Use a different email
+        </button>
+      </div>
+    )
   }
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Admin Login</h1>
-      <p className="text-sm text-gray-600 mb-6">Sign in to access the APOSS admin dashboard.</p>
+      <p className="text-sm text-gray-600 mb-6">Enter your email to receive a secure sign-in link.</p>
 
       {error && (
         <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
@@ -53,26 +97,19 @@ function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+            placeholder="admin@example.com"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00376c]"
           />
         </div>
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? 'Signing in…' : 'Sign In'}
+          {loading ? 'Sending link…' : 'Send Magic Link'}
         </Button>
       </form>
-      <p className="mt-4 text-xs text-gray-500">
-        Note: This site uses a single admin account configured via environment variables.
-      </p>
+      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <p className="text-xs text-blue-800">
+          <strong>Note:</strong> Only authorized admin email addresses can sign in. You'll receive an email with a secure sign-in link.
+        </p>
+      </div>
     </div>
   )
 }
