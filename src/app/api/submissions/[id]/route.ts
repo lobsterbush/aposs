@@ -35,7 +35,8 @@ export async function PATCH(
         title: submission.title,
         status: status as 'UNDER_REVIEW' | 'ACCEPTED' | 'REJECTED' | 'SCHEDULED',
         reviewerComments: submission.reviewerComments || undefined,
-        scheduledAt: submission.event?.scheduledAt
+        scheduledAt: submission.event?.scheduledAt,
+        zoomJoinUrl: submission.event?.zoomJoinUrl
       })
       
       let emailSubject = ''

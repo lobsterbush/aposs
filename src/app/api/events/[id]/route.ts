@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import type { Prisma } from '@prisma/client'
+import { sendEmail } from '@/lib/email'
+import { generateStatusUpdateEmail } from '@/lib/email-templates/status-update'
 
 export async function PATCH(
   request: Request,
@@ -42,6 +44,34 @@ export async function PATCH(
         where: { id: event.submissionId },
         data: { scheduledAt: new Date(scheduledAt) }
       })
+    }
+
+    const shouldNotify = Boolean(event.submissionId && (typeof scheduledAt !== 'undefined' || typeof zoomJoinUrl !== 'undefined'))
+    if (shouldNotify && event.submissionId) {
+      const submission = await prisma.submission.findUnique({
+        where: { id: event.submissionId },
+        select: {
+          authorName: true,
+          authorEmail: true,
+          title: true
+        }
+      })
+
+      if (submission) {
+        const emailHtml = generateStatusUpdateEmail({
+          authorName: submission.authorName,
+          title: submission.title,
+          status: 'SCHEDULED',
+          scheduledAt: event.scheduledAt,
+          zoomJoinUrl: event.zoomJoinUrl || undefined
+        })
+
+        await sendEmail({
+          to: submission.authorEmail,
+          subject: typeof scheduledAt !== 'undefined' ? 'Your APOSS seminar date was updated' : 'Zoom link for your APOSS seminar',
+          html: emailHtml
+        })
+      }
     }
 
     return NextResponse.json({ success: true, event })

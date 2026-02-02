@@ -4,8 +4,8 @@ A Next.js application for managing academic seminar submissions, scheduling, and
 
 ## 🎯 Features
 
-- **Paper Submission System** - Multi-step form with PDF upload
-- **Email Notifications** - Automated confirmations and status updates
+- **Paper Submission System** - Multi-step form (no uploads; email confirmations)
+- **Email Notifications** - Automated confirmations and scheduling updates
 - **Admin Dashboard** - Review submissions, schedule events, manage calendar
 - **Magic Link Authentication** - Secure, passwordless admin login
 - **Event Management** - Schedule seminars, manage Zoom links, public calendar
@@ -51,7 +51,6 @@ Open [http://localhost:3000](http://localhost:3000)
 - **Database:** PostgreSQL (Prisma ORM)
 - **Authentication:** NextAuth.js (Email Magic Links)
 - **Email:** Resend
-- **File Storage:** Vercel Blob
 - **Styling:** Tailwind CSS 4
 - **UI Components:** Radix UI
 - **Deployment:** Vercel
@@ -96,7 +95,6 @@ EMAIL_FROM=APOSS <notifications@aposs.org>
 ADMIN_EMAIL=admin@example.com
 SMTP_HOST=smtp.resend.com
 SMTP_PORT=465
-BLOB_READ_WRITE_TOKEN=vercel_blob_xxxxx
 ```
 
 See `.env.example` for complete list.

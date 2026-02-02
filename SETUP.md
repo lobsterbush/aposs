@@ -5,7 +5,7 @@
 APOSS (Asian Politics Online Seminar Series) is a Next.js 15 application for managing academic seminar submissions and scheduling.
 
 **Key Features:**
-- ✅ Paper submission system with PDF upload
+- ✅ Paper submission system (text form)
 - ✅ Email notifications (submission confirmations, status updates)
 - ✅ Admin dashboard with review workflow
 - ✅ Event scheduling and calendar management
@@ -58,8 +58,6 @@ ADMIN_EMAIL="your-email@example.com"
 SMTP_HOST="smtp.resend.com"
 SMTP_PORT="465"
 
-# File Upload (Optional for local dev - will show error if not configured)
-# BLOB_READ_WRITE_TOKEN="vercel_blob_token"
 ```
 
 ### 3. Set Up Database
@@ -105,13 +103,7 @@ Get your `DATABASE_URL` connection string.
 3. Generate API key
 4. Note: You need a verified domain to send emails in production
 
-### 3. Set Up File Storage
-
-1. In Vercel dashboard, go to Storage
-2. Create a Blob Store
-3. Copy the `BLOB_READ_WRITE_TOKEN`
-
-### 4. Deploy to Vercel
+### 3. Deploy to Vercel
 
 #### Option A: Deploy via Vercel Dashboard
 
@@ -140,7 +132,6 @@ EMAIL_FROM=APOSS <notifications@aposs.org>
 ADMIN_EMAIL=admin1@example.com,admin2@example.com
 SMTP_HOST=smtp.resend.com
 SMTP_PORT=465
-BLOB_READ_WRITE_TOKEN=vercel_blob_xxxxx
 ```
 
 ### 6. Run Database Migrations
@@ -233,21 +224,6 @@ npx prisma migrate reset
 
 ---
 
-## File Uploads
-
-### Vercel Blob Storage
-
-- PDFs uploaded through submission form
-- Stored in Vercel Blob with public access
-- Max file size: 25MB (client-side validation)
-- Only PDF files accepted
-
-### Local Development Without Blob
-
-If `BLOB_READ_WRITE_TOKEN` is not set, file upload will show an error message but submission will still work without the PDF.
-
----
-
 ## Admin Dashboard
 
 Access: `/admin`
@@ -289,13 +265,6 @@ Templates are HTML with inline CSS for maximum email client compatibility.
 2. Verify domain in Resend dashboard
 3. Check Resend dashboard for error logs
 4. Ensure `EMAIL_FROM` uses verified domain
-
-### File Upload Fails
-
-1. Check `BLOB_READ_WRITE_TOKEN` is set
-2. Verify token has read/write permissions
-3. Check file is PDF and under 25MB
-4. Check Vercel Blob dashboard for quota
 
 ### Database Connection Errors
 
@@ -361,15 +330,6 @@ Recommended monitoring services:
 pg_dump $DATABASE_URL > backup-$(date +%Y%m%d).sql
 ```
 
-### File Storage Backups
-
-Vercel Blob provides durability but consider periodic backups:
-
-```bash
-# List and download blobs via Vercel API
-# See: https://vercel.com/docs/storage/vercel-blob
-```
-
 ---
 
 ## Performance Optimization
@@ -386,7 +346,6 @@ Current setup is optimized for:
 
 - **Vercel Pro**: $20 (hosting, serverless functions, bandwidth)
 - **Vercel Postgres**: $20 (250MB storage)
-- **Vercel Blob**: ~$5 (50GB transfer, ~100 PDFs)
 - **Resend**: $0-20 (3,000 free emails/month, then $20)
 - **Domain**: $1-2/month (~$15/year)
 

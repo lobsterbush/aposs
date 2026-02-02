@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Header } from '@/components/layout/header'
+import { PageHero } from '@/components/layout/PageHero'
+import { AnimatedCard, AnimatedButton } from '@/components/animated'
 import { ArrowLeft, Send, CheckCircle, FileText, User, Sparkles, Star, Globe, Award } from 'lucide-react'
 import Link from 'next/link'
 
@@ -27,11 +28,6 @@ interface SubmissionData {
   isPublished: boolean
   presentationPreference: string
   availabilityNotes: string
-  
-  // Paper upload
-  paperUrl?: string
-  paperFileName?: string
-  paperFileSize?: number
 }
 
 export default function SubmitPage() {
@@ -53,93 +49,19 @@ export default function SubmitPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
-  const [file, setFile] = useState<File | null>(null)
-  const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState<string | null>(null)
 
   const handleInputChange = (field: keyof SubmissionData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0]
-    if (!selectedFile) return
-    
-    setUploadError(null)
-    
-    // Validate file type
-    if (!selectedFile.name.toLowerCase().endsWith('.pdf')) {
-      setUploadError('Only PDF files are allowed')
-      return
-    }
-    
-    // Validate file size (25MB max)
-    if (selectedFile.size > 25 * 1024 * 1024) {
-      setUploadError('File size must be less than 25MB')
-      return
-    }
-    
-    setFile(selectedFile)
-  }
-
-  const uploadPaper = async () => {
-    if (!file) return null
-    
-    setUploading(true)
-    setUploadError(null)
-    try {
-      const response = await fetch(
-        `/api/upload?filename=${encodeURIComponent(file.name)}`,
-        {
-          method: 'POST',
-          body: file,
-        }
-      )
-      const result = await response.json()
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Upload failed')
-      }
-      
-      return {
-        url: result.url,
-        filename: result.filename,
-        size: result.size
-      }
-    } catch (error) {
-      console.error('Upload failed:', error)
-      setUploadError(error instanceof Error ? error.message : 'Upload failed')
-      return null
-    } finally {
-      setUploading(false)
-    }
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     
     try {
-      // Upload paper if provided
-      let paperData = {}
-      if (file) {
-        const uploadResult = await uploadPaper()
-        if (!uploadResult) {
-          setIsSubmitting(false)
-          return
-        }
-        paperData = {
-          paperUrl: uploadResult.url,
-          paperFileName: uploadResult.filename,
-          paperFileSize: uploadResult.size,
-          paperUploadedAt: new Date().toISOString()
-        }
-      }
-      
       const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, ...paperData })
+        body: JSON.stringify(formData)
       })
       
       if (response.ok) {
@@ -156,30 +78,24 @@ export default function SubmitPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0a1628] via-[#0f2342] to-[#0a1628] flex items-center justify-center p-6 relative overflow-hidden">
-        {/* Subtle animated background in brand blues */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300/40 rounded-full mix-blend-multiply blur-2xl animate-float"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/30 rounded-full mix-blend-multiply blur-2xl animate-float" style={{animationDelay: '2s'}}></div>
-        </div>
-        
-        <div className="relative max-w-md w-full bg-white rounded-2xl p-8 text-center shadow-elegant animate-scale-in">
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg animate-pulse-glow">
+      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center p-6">
+        <AnimatedCard className="max-w-md w-full text-center">
+          <div className="w-20 h-20 bg-[#17152b] rounded-2xl flex items-center justify-center mx-auto mb-8">
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Submission Received!</h1>
-          <p className="text-gray-700 mb-8 text-lg leading-relaxed">
+          <h1 className="text-4xl font-bold text-[#17152b] mb-4">Submission Received!</h1>
+          <p className="text-lg text-[#404040] mb-8 leading-relaxed">
             Thank you for your submission. We'll review your proposal and get back to you within 2-3 business days.
           </p>
           <div className="space-y-4">
-<Button asChild size="lg" variant="default" className="w-full">
-              <Link href="/" className="no-underline text-white">Return to Home</Link>
-            </Button>
-<Button variant="outline" asChild size="lg" className="w-full">
-              <Link href="/schedule" className="no-underline">View Schedule</Link>
-            </Button>
+            <AnimatedButton variant="primary" size="lg" href="/" className="w-full">
+              Return to Home
+            </AnimatedButton>
+            <AnimatedButton variant="secondary" size="lg" href="/schedule" className="w-full">
+              View Schedule
+            </AnimatedButton>
           </div>
-        </div>
+        </AnimatedCard>
       </div>
     )
   }
@@ -187,97 +103,77 @@ export default function SubmitPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-white relative overflow-hidden">
-        {/* Subtle animated background in brand blues */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-10 w-40 h-40 bg-blue-400/20 rounded-full mix-blend-multiply blur-2xl animate-float"></div>
-          <div className="absolute bottom-40 right-20 w-56 h-56 bg-blue-500/20 rounded-full mix-blend-multiply blur-2xl animate-float" style={{animationDelay: '2s'}}></div>
-        </div>
-        
-        {/* Hero Section */}
-        <div className="relative py-16 border-b border-slate-200 bg-white">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#00376c]/10 text-[#00376c] text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4 mr-2 text-blue-300" />
-              Join our global research community
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-4 text-slate-900">
-              Submit Your Research
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-slate-600 leading-relaxed mb-10 max-w-3xl mx-auto">
-              Share your groundbreaking research with the APOSS community and connect with scholars worldwide.
-            </p>
-            
-            <div className="flex items-center justify-center space-x-8 mb-16">
+      <div className="min-h-screen bg-[#fafafa]">
+        <div style={{ marginTop: '80px' }}>
+          <PageHero title="Submit Your Research" subtitle="Share your groundbreaking research with the APOSS community">
+            <div className="flex items-center justify-center gap-8 mt-8">
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-full flex items-center justify-center mb-3 mx-auto">
+                <div className="w-16 h-16 bg-[#00376c] rounded-2xl flex items-center justify-center mb-3 mx-auto">
                   <Globe className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-slate-600 text-sm font-medium">Global Reach</div>
+                <div className="text-sm font-bold text-[#17152b]">Global Reach</div>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-full flex items-center justify-center mb-3 mx-auto">
+                <div className="w-16 h-16 bg-[#dc7510] rounded-2xl flex items-center justify-center mb-3 mx-auto">
                   <Star className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-slate-600 text-sm font-medium">Expert Review</div>
+                <div className="text-sm font-bold text-[#17152b]">Expert Review</div>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-full flex items-center justify-center mb-3 mx-auto">
+                <div className="w-16 h-16 bg-[#ba3828] rounded-2xl flex items-center justify-center mb-3 mx-auto">
                   <Award className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-slate-600 text-sm font-medium">Career Boost</div>
+                <div className="text-sm font-bold text-[#17152b]">Career Boost</div>
               </div>
             </div>
-          </div>
+          </PageHero>
         </div>
         
         {/* Form Section */}
-        <div className="relative max-w-4xl mx-auto px-6 py-12">
-          <Link href="/" className="inline-flex items-center px-4 py-2 rounded-xl text-slate-700 hover:text-slate-900 font-medium mb-8 transition-all duration-300 hover:scale-105">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+        <div className="container max-w-4xl py-16">
+          <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 text-[#17152b] hover:text-[#00376c] font-semibold mb-8 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
 
           {/* Progress Bar */}
           <div className="mb-12">
-            <div className="bg-white rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full ${currentStep >= 1 ? 'bg-gradient-to-r from-[#00376c] to-[#17152b] text-white shadow-lg' : 'bg-slate-100 text-slate-500'} font-bold text-lg transition-all duration-300`}>
+            <AnimatedCard>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${currentStep >= 1 ? 'bg-[#17152b] text-white' : 'bg-[#e5e5e5] text-[#737373]'} font-bold text-lg transition-all`}>
                   1
                 </div>
-                <div className={`h-2 flex-1 ${currentStep >= 2 ? 'bg-gradient-to-r from-[#00376c] to-[#17152b]' : 'bg-slate-100'} rounded-full transition-all duration-300`}></div>
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full ${currentStep >= 2 ? 'bg-gradient-to-r from-[#00376c] to-[#17152b] text-white shadow-lg' : 'bg-slate-100 text-slate-500'} font-bold text-lg transition-all duration-300`}>
+                <div className={`h-1 flex-1 rounded-full ${currentStep >= 2 ? 'bg-[#17152b]' : 'bg-[#e5e5e5]'} transition-all`}></div>
+                <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${currentStep >= 2 ? 'bg-[#17152b] text-white' : 'bg-[#e5e5e5] text-[#737373]'} font-bold text-lg transition-all`}>
                   2
                 </div>
-                <div className={`h-2 flex-1 ${currentStep >= 3 ? 'bg-gradient-to-r from-[#00376c] to-[#17152b]' : 'bg-slate-100'} rounded-full transition-all duration-300`}></div>
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full ${currentStep >= 3 ? 'bg-gradient-to-r from-[#00376c] to-[#17152b] text-white shadow-lg' : 'bg-slate-100 text-slate-500'} font-bold text-lg transition-all duration-300`}>
+                <div className={`h-1 flex-1 rounded-full ${currentStep >= 3 ? 'bg-[#17152b]' : 'bg-[#e5e5e5]'} transition-all`}></div>
+                <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${currentStep >= 3 ? 'bg-[#17152b] text-white' : 'bg-[#e5e5e5] text-[#737373]'} font-bold text-lg transition-all`}>
                   3
                 </div>
               </div>
-              <div className="flex justify-between text-sm text-slate-700 font-medium">
+              <div className="flex justify-between text-sm font-semibold text-[#17152b]">
                 <span>Author Info</span>
                 <span>Research Details</span>
                 <span>Review & Submit</span>
               </div>
-            </div>
+            </AnimatedCard>
           </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Step 1: Author Information */}
           {currentStep === 1 && (
-            <div className="bg-white rounded-2xl shadow-elegant p-8 border border-gray-100 animate-scale-in">
-              <div className="flex items-center mb-8">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+            <AnimatedCard>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-[#17152b] rounded-xl flex items-center justify-center">
                   <User className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900">Author Information</h2>
+                <h2 className="text-3xl font-bold text-[#17152b]">Author Information</h2>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                  <label className="block text-sm font-semibold text-[#17152b] mb-2">Full Name</label>
                   <Input
                     value={formData.authorName}
                     onChange={(e) => handleInputChange('authorName', e.target.value)}
@@ -331,24 +227,26 @@ export default function SubmitPage() {
               </div>
               
               <div className="flex justify-end mt-8">
-                <Button 
+                <button
                   type="button"
-                  size="lg"
                   onClick={() => setCurrentStep(2)}
                   disabled={!formData.authorName || !formData.authorEmail || !formData.authorAffiliation}
+                  className="px-8 py-4 bg-black text-white border-[3px] border-black hover:bg-white hover:text-black transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next: Research Details
-                </Button>
+                </button>
               </div>
             </div>
           )}
 
           {/* Step 2: Research Details */}
           {currentStep === 2 && (
-            <div className="bg-white rounded-2xl shadow-elegant p-8 border border-gray-100">
-              <div className="flex items-center mb-6">
-<FileText className="w-6 h-6 text-slate-700 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Research Details</h2>
+            <div className="card">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 bg-black flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="heading-md">Research Details</h2>
               </div>
               
               <div className="space-y-6">
@@ -414,28 +312,28 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                     required
                   />
                 </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Paper (Optional)</label>
-                  <p className="text-sm text-gray-600 mb-2">You can upload your paper now or send it later. PDF only, max 25MB.</p>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#00376c] file:text-white hover:file:bg-[#17152b] cursor-pointer"
-                  />
-                  {file && (
-                    <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-sm text-green-800">
-                        ✓ Selected: <strong>{file.name}</strong> ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                      </p>
-                    </div>
-                  )}
-                  {uploadError && (
-                    <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-sm text-red-800">{uploadError}</p>
-                    </div>
-                  )}
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Presentation preference</label>
+                    <Input
+                      value={formData.presentationPreference}
+                      onChange={(e) => handleInputChange('presentationPreference', e.target.value)}
+                      placeholder="e.g., Any weekday after 10am JST"
+                    />
+                  </div>
+                  <div className="flex items-center gap-3 mt-7 md:mt-0">
+                    <input
+                      id="isPublished"
+                      type="checkbox"
+                      checked={formData.isPublished}
+                      onChange={(e) => handleInputChange('isPublished', e.target.checked)}
+                      className="h-4 w-4 border-gray-300 text-black focus:ring-black"
+                    />
+                    <label htmlFor="isPublished" className="text-sm font-semibold text-gray-700">
+                      This work is already published or forthcoming
+                    </label>
+                  </div>
                 </div>
                 
                 <div>
@@ -443,7 +341,7 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                   <Textarea
                     value={formData.availabilityNotes}
                     onChange={(e) => handleInputChange('availabilityNotes', e.target.value)}
-                    placeholder="Any additional information, scheduling preferences, or special requirements..."
+                    placeholder="Any scheduling preferences, discussant suggestions, or special requirements..."
                     rows={4}
                     className="resize-none"
                   />
@@ -451,27 +349,33 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
               </div>
               
               <div className="flex justify-between mt-8">
-<Button type="button" variant="outline" onClick={() => setCurrentStep(1)}>
+                <button 
+                  type="button" 
+                  onClick={() => setCurrentStep(1)}
+                  className="px-8 py-4 bg-white text-black border-[3px] border-black hover:bg-black hover:text-white transition-colors font-bold"
+                >
                   Back
-                </Button>
-                <Button 
+                </button>
+                <button 
                   type="button"
-                  size="lg"
                   onClick={() => setCurrentStep(3)}
                   disabled={!formData.title || !formData.abstract || !formData.researchField || !formData.methodology}
+                  className="px-8 py-4 bg-black text-white border-[3px] border-black hover:bg-white hover:text-black transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Review Submission
-                </Button>
+                </button>
               </div>
             </div>
           )}
 
           {/* Step 3: Review & Submit */}
           {currentStep === 3 && (
-            <div className="bg-white rounded-2xl shadow-elegant p-8 border border-gray-100">
-              <div className="flex items-center mb-6">
-<CheckCircle className="w-6 h-6 text-slate-700 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Review Your Submission</h2>
+            <div className="card">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 bg-black flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="heading-md">Review Your Submission</h2>
               </div>
               
               <div className="space-y-6 text-sm">
@@ -506,17 +410,21 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
               </div>
               
               <div className="flex justify-between mt-8">
-                <Button type="button" variant="outline" onClick={() => setCurrentStep(2)}>
-                  Back to Edit
-                </Button>
-                <Button 
-                  type="submit"
-                  size="lg"
-                  disabled={isSubmitting || uploading}
+                <button 
+                  type="button" 
+                  onClick={() => setCurrentStep(2)}
+                  className="px-8 py-4 bg-white text-black border-[3px] border-black hover:bg-black hover:text-white transition-colors font-bold"
                 >
-                  {uploading ? 'Uploading paper...' : isSubmitting ? 'Submitting...' : 'Submit Proposal'}
-                  {!uploading && !isSubmitting && <Send className="w-4 h-4 ml-2" />}
-                </Button>
+                  Back to Edit
+                </button>
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white border-[3px] border-black hover:bg-white hover:text-black transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Proposal'}
+                  {!isSubmitting && <Send className="w-4 h-4" />}
+                </button>
               </div>
             </div>
           )}

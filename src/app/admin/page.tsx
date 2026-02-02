@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { FileText, CheckCircle, X, Eye, CalendarDays, Video } from 'lucide-react'
-import { Header } from '@/components/layout/header'
+import { AdminLayout } from '@/components/admin/AdminLayout'
+import { AnimatedCard } from '@/components/animated'
+import { FileText, CheckCircle, X, Eye, Clock, TrendingUp } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 
@@ -14,12 +13,18 @@ interface Submission {
   authorName: string
   authorEmail: string
   authorAffiliation: string
+  authorBio?: string
+  coAuthors?: string
+  researchField?: string
+  methodology?: string
+  keywords?: string
+  isPublished?: boolean
+  presentationPreference?: string
+  availabilityNotes?: string
   status: 'PENDING' | 'UNDER_REVIEW' | 'ACCEPTED' | 'SCHEDULED' | 'PRESENTED' | 'REJECTED'
   submittedAt: string
   reviewedAt?: string
   scheduledAt?: string
-  paperUrl?: string
-  paperFileName?: string
 }
 
 interface Event {
@@ -122,59 +127,82 @@ export default function AdminPage() {
     }
   }
 
-  if (loading && status === 'authenticated') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#00376c] mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading admin dashboard...</p>
-        </div>
-      </div>
-    )
-  }
+  // Calculate stats
+  const pendingCount = submissions.filter(s => s.status === 'PENDING').length
+  const acceptedCount = submissions.filter(s => s.status === 'ACCEPTED').length
+  const upcomingCount = events.filter(e => new Date(e.scheduledAt) > new Date() && e.status === 'SCHEDULED').length
 
-  if (status === 'loading') {
+  if (loading || status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-[#00376c]/20 border-t-[#00376c] mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication…</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="w-12 h-12 border-[3px] border-[#17152b]/20 border-t-[#17152b] rounded-full animate-spin" />
         </div>
-      </div>
-    )
-  }
-
-  if (status === 'unauthenticated') {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="mx-auto max-w-md px-6 pt-28 pb-16">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Access</h1>
-            <p className="text-gray-600 mb-6">Please sign in to access the admin dashboard.</p>
-            <Button asChild>
-              <Link href="/login?callbackUrl=%2Fadmin" className="no-underline text-white">Sign In</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <div className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-1">
-            APOSS Admin Dashboard
-          </h1>
-          <p className="text-slate-600">
-            Manage submissions, schedule seminars, and organize events.
-          </p>
+    <AdminLayout>
+      <div className="space-y-8">
+        {/* Header with Stats */}
+        <div>
+          <h1 className="text-4xl font-bold text-[#17152b] mb-2">Dashboard</h1>
+          <p className="text-[#404040]">Overview of APOSS submissions and events</p>
         </div>
-      </div>
-      <div className="max-w-7xl mx-auto px-6 py-8">
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <AnimatedCard>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#737373] mb-2">Total Submissions</p>
+                <p className="text-4xl font-bold text-[#17152b]">{submissions.length}</p>
+              </div>
+              <div className="w-12 h-12 rounded-xl bg-[#00376c]/10 flex items-center justify-center">
+                <FileText className="w-6 h-6 text-[#00376c]" />
+              </div>
+            </div>
+          </AnimatedCard>
+
+          <AnimatedCard delay={0.05}>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#737373] mb-2">Pending Review</p>
+                <p className="text-4xl font-bold text-[#17152b]">{pendingCount}</p>
+              </div>
+              <div className="w-12 h-12 rounded-xl bg-[#dc7510]/10 flex items-center justify-center">
+                <Clock className="w-6 h-6 text-[#dc7510]" />
+              </div>
+            </div>
+          </AnimatedCard>
+
+          <AnimatedCard delay={0.1}>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#737373] mb-2">Accepted</p>
+                <p className="text-4xl font-bold text-[#17152b]">{acceptedCount}</p>
+              </div>
+              <div className="w-12 h-12 rounded-xl bg-[#16a34a]/10 flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-[#16a34a]" />
+              </div>
+            </div>
+          </AnimatedCard>
+
+          <AnimatedCard delay={0.15}>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm font-medium text-[#737373] mb-2">Upcoming Events</p>
+                <p className="text-4xl font-bold text-[#17152b]">{upcomingCount}</p>
+              </div>
+              <div className="w-12 h-12 rounded-xl bg-[#17152b]/10 flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-[#17152b]" />
+              </div>
+            </div>
+          </AnimatedCard>
+        </div>
+
+        <div className="space-y-6">
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('submissions')}
@@ -217,7 +245,7 @@ export default function AdminPage() {
             <div className="bg-white rounded-lg shadow">
               <div className="px-6 py-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">Recent Submissions</h2>
-                <p className="mt-1 text-sm text-gray-600">How to schedule: 1) Click Review, 2) Click Accept, 3) Pick a date/time; we'll create the event and update the schedule automatically.</p>
+                <p className="mt-1 text-sm text-gray-600">How to schedule: Review → Accept → pick a date/time. We email the presenter with the date (and Zoom link when added).</p>
               </div>
               <div className="divide-y divide-gray-200">
                 {submissions.map((submission) => (
@@ -230,19 +258,6 @@ export default function AdminPage() {
                           <p><strong>Email:</strong> {submission.authorEmail}</p>
                           <p><strong>Affiliation:</strong> {submission.authorAffiliation}</p>
                           <p><strong>Submitted:</strong> {new Date(submission.submittedAt).toLocaleDateString()}</p>
-                          {submission.paperUrl && (
-                            <p>
-                              <strong>Paper:</strong>{' '}
-                              <a 
-                                href={submission.paperUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-[#00376c] hover:underline"
-                              >
-                                Download PDF
-                              </a>
-                            </p>
-                          )}
                         </div>
                         <div className="mt-3">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(submission.status)}`}>

@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Calendar, Clock, User, ExternalLink } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Header } from '@/components/layout/header'
+import { PageHero } from '@/components/layout/PageHero'
+import { AnimatedCard } from '@/components/animated'
 
 interface Event {
   id: string
@@ -68,12 +69,12 @@ export default function SchedulePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#fafafa]">
         <Header />
         <div className="flex items-center justify-center pt-28 pb-12">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-2 border-[#00376c]/20 border-t-[#00376c] mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading schedule...</p>
+            <div className="animate-spin w-12 h-12 border-[3px] border-[#17152b]/20 border-t-[#17152b] mx-auto mb-4"></div>
+            <p className="text-[#404040]">Loading schedule...</p>
           </div>
         </div>
       </div>
@@ -81,134 +82,125 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#fafafa]">
       <Header />
-      <div className="relative bg-gradient-to-r from-[#17152b] to-[#00376c] text-white on-brand-navy">
-        <div className="mx-auto max-w-4xl px-6 py-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">APOSS Schedule</h1>
-          <p className="text-white/90 text-lg max-w-3xl">
-            Join us for engaging seminars on Asian politics. All seminars are conducted online via Zoom.
-          </p>
-          <div className="mt-6 inline-flex items-center px-4 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium">
-            <Calendar className="w-4 h-4 mr-2" />
-            Upcoming and past events
-          </div>
-        </div>
+      <div style={{ marginTop: '80px' }}>
+        <PageHero title="APOSS Schedule" subtitle="Join us for engaging seminars on Asian politics" />
       </div>
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="container max-w-6xl py-16">
 
-        {/* Info Note per Notion */}
-        <div className="mb-6 rounded-xl bg-[#00376c]/5 border border-[#00376c]/10 p-4 text-sm text-[#00376c]">
-          Times are presented in JST by default for historical reasons. Sessions featuring European scholars may be shown in EST for convenience. Registration is required for all sessions.
-        </div>
+        {/* Info Note */}
+        <AnimatedCard className="mb-6 bg-[#00376c]/5 border-[#00376c]/20">
+          <p className="text-sm text-[#404040]">
+            Times are presented in JST by default for historical reasons. Sessions featuring European scholars may be shown in EST for convenience. Registration is required for all sessions.
+          </p>
+        </AnimatedCard>
 
         {/* Upcoming Events */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-<Calendar className="w-6 h-6 mr-2 text-slate-700" />
+          <h2 className="text-3xl font-bold text-[#17152b] mb-6 flex items-center gap-3">
+            <Calendar className="w-8 h-8 text-[#dc7510]" />
             Upcoming Seminars
           </h2>
           
           {upcomingEvents.length > 0 ? (
             <div className="space-y-6">
               {upcomingEvents.map((event) => (
-                <div key={event.id} className="bg-white rounded-xl shadow-md p-6 border-l-4 border-[#00376c] hover:shadow-lg transition-shadow">
+                <AnimatedCard key={event.id}>
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">{event.title}</h3>
-                      <div className="space-y-2 text-sm text-gray-600">
-                        <div className="flex items-center">
-<User className="w-4 h-4 mr-2 text-slate-700" />
+                      <h3 className="text-2xl font-bold text-[#17152b] mb-3">{event.title}</h3>
+                      <div className="space-y-2 text-sm text-[#404040]">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4" />
                           <span><strong>Presenter:</strong> {event.presenter}</span>
                         </div>
-                        <div className="flex items-center">
-<Calendar className="w-4 h-4 mr-2 text-slate-700" />
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
                           <span><strong>Date:</strong> {formatDate(event.scheduledAt)}</span>
                         </div>
-                        <div className="flex items-center">
-<Clock className="w-4 h-4 mr-2 text-slate-700" />
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4" />
                           <span><strong>Time:</strong> {formatTime(event.scheduledAt)}</span>
                         </div>
                       </div>
                       {event.description && (
-                        <p className="mt-3 text-gray-700">{event.description}</p>
+                        <p className="mt-3 text-[#404040]">{event.description}</p>
                       )}
                     </div>
                     <div className="mt-4 lg:mt-0 lg:ml-6">
                       {event.zoomJoinUrl ? (
-<Button asChild>
-                          <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" className="no-underline text-white inline-flex items-center">
-                            Join Meeting
-                            <ExternalLink className="w-4 h-4 ml-2" />
-                          </a>
-                        </Button>
+                        <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" className="no-underline inline-flex items-center gap-2 bg-[#17152b] text-white px-6 py-3 rounded-lg hover:bg-[#00376c] transition-colors font-semibold">
+                          Join Meeting
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
                       ) : (
-                        <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-[#00376c]/10 text-[#00376c]">
+                        <span className="inline-flex items-center px-4 py-2 bg-[#f5f5f5] border border-[#e5e5e5] text-sm font-semibold text-[#737373] rounded-lg">
                           Meeting Link TBA
                         </span>
                       )}
                     </div>
                   </div>
-                </div>
+                </AnimatedCard>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 bg-white rounded-xl shadow-sm">
-              <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-600">No upcoming seminars scheduled at the moment.</p>
-              <p className="text-gray-500 mt-2">Check back soon for new announcements!</p>
-            </div>
+            <AnimatedCard className="text-center py-12">
+              <Calendar className="w-12 h-12 mx-auto mb-4 text-[#a3a3a3]" />
+              <p className="text-[#525252] mb-2">No upcoming seminars scheduled at the moment.</p>
+              <p className="text-[#737373]">Check back soon for new announcements!</p>
+            </AnimatedCard>
           )}
         </div>
 
         {/* Past Events */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Past Seminars</h2>
+          <h2 className="text-3xl font-bold text-[#17152b] mb-6">Past Seminars</h2>
           
           {pastEvents.length > 0 ? (
             <div className="space-y-4">
               {pastEvents.slice(0, 10).map((event) => (
-                <div key={event.id} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow">
+                <AnimatedCard key={event.id}>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex-1">
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">{event.title}</h3>
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-sm text-gray-600">
+                      <h3 className="text-lg font-bold text-[#17152b] mb-1">{event.title}</h3>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-sm text-[#404040]">
                         <span><strong>Presenter:</strong> {event.presenter}</span>
                         <span><strong>Date:</strong> {formatDate(event.scheduledAt)}</span>
                       </div>
                     </div>
                     <div className="mt-2 sm:mt-0">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <span className="inline-flex items-center px-3 py-1 bg-[#f5f5f5] border border-[#e5e5e5] text-xs font-semibold text-[#737373] rounded-lg">
                         Completed
                       </span>
                     </div>
                   </div>
-                </div>
+                </AnimatedCard>
               ))}
               {pastEvents.length > 10 && (
                 <div className="text-center py-4">
-                  <p className="text-gray-500">
+                  <p className="text-[#737373]">
                     Showing 10 most recent seminars. We've hosted {pastEvents.length} seminars in total!
                   </p>
                 </div>
               )}
             </div>
           ) : (
-            <div className="text-center py-8 bg-white rounded-lg shadow-sm">
-              <p className="text-gray-600">No past seminars to display yet.</p>
-            </div>
+            <AnimatedCard className="text-center py-8">
+              <p className="text-[#525252]">No past seminars to display yet.</p>
+            </AnimatedCard>
           )}
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 text-center bg-[#00376c] rounded-xl p-8">
-          <h3 className="text-2xl font-bold text-white mb-4">Want to Present?</h3>
-          <p className="text-white/80 mb-6">
+        <div className="mt-12 card section-dark text-center">
+          <h3 className="heading-sm mb-4">Want to Present?</h3>
+          <p className="text-white mb-6">
             Share your research with the APOSS community. Submit your proposal today!
           </p>
-          <Button asChild size="lg" variant="default">
-            <Link href="/submit" className="no-underline text-white">Submit Your Proposal</Link>
-          </Button>
+          <Link href="/submit" className="no-underline inline-flex items-center gap-3 bg-white text-black px-8 py-4 border-[3px] border-white hover:bg-black hover:text-white hover:border-white transition-colors font-bold">
+            Submit Your Proposal
+          </Link>
         </div>
       </div>
     </div>

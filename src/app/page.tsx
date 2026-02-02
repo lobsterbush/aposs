@@ -1,322 +1,301 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
-import { Header } from '@/components/layout/header'
-import { Calendar, Users, Globe, BookOpen, ArrowRight, Star, Award, Zap, Upload } from 'lucide-react'
+'use client'
 
-export default async function Home() {
+import Link from 'next/link'
+import { Header } from '@/components/layout/header'
+import { Calendar, Users, Globe, BookOpen, Award, Upload, ArrowRight } from 'lucide-react'
+import { AnimatedSection, AnimatedCard, AnimatedButton, FloatingLogo, AnimatedItem } from '@/components/animated'
+import { motion } from 'framer-motion'
+
+export default function Home() {
   return (
     <>
       <Header />
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="relative py-24 bg-gradient-to-br from-[#0a1628] via-[#0f2342] to-[#00376c] on-brand-navy">
-          <div className="relative mx-auto max-w-5xl px-6 text-center">
-            {/* Logo and Badge */}
-            <div className="mb-12">
-              <div className="flex justify-center mb-8">
-                <div className="relative group">
-                  <div className="relative w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80">
-                    <Image
-                      src="/branding/Drop logo ht 2000px.png"
-                      alt="APOSS Drop Logo"
-                      fill
-                      sizes="(max-width: 768px) 16rem, (max-width: 1024px) 18rem, 20rem"
-                      className="object-contain drop-shadow-lg logo-buffer"
-                      priority
-                    />
+      <main className="bg-white overflow-x-hidden" style={{ marginTop: '72px' }}>
+        {/* Hero with animated gradient background */}
+        <section className="relative py-24 md:py-32 overflow-hidden">
+          {/* Animated gradient background */}
+          <div className="absolute inset-0 bg-aposs-gradient bg-200% animate-gradient opacity-5" />
+          
+          <div className="container max-w-6xl relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <AnimatedSection animation="slide-left" className="space-y-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <h1 className="text-5xl md:text-7xl font-bold text-aposs-navy leading-tight mb-6">
+                    Asian Politics Online Seminar Series
+                  </h1>
+                  <p className="text-xl text-aposs-gray-700 leading-relaxed max-w-2xl">
+                    Weekly online seminars connecting researchers across continents. Concise talks, sharp feedback, and an inclusive audience.
+                  </p>
+                </motion.div>
+
+                <motion.div 
+                  className="flex flex-col sm:flex-row gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <AnimatedButton variant="primary" size="lg" href="/submit">
+                    <Upload className="w-5 h-5" /> Submit a paper
+                  </AnimatedButton>
+                  <AnimatedButton variant="secondary" size="lg" href="/schedule">
+                    <Calendar className="w-5 h-5" /> View schedule
+                  </AnimatedButton>
+                </motion.div>
+
+                <motion.div 
+                  className="flex flex-col gap-2 text-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <div className="text-aposs-gray-700">
+                    <span className="font-bold text-aposs-navy">104 seminars delivered</span>
                   </div>
+                  <div className="text-aposs-gray-700">
+                    Global, online, free
+                  </div>
+                </motion.div>
+              </AnimatedSection>
+
+              <AnimatedSection animation="slide-right" className="flex justify-center">
+                <div className="relative">
+                  <FloatingLogo 
+                    src="/branding/aposs logo with conversation icon ht 2000px.png"
+                    alt="APOSS Logo"
+                    size={400}
+                    className="drop-shadow-2xl"
+                  />
+                  {/* Decorative animated blobs */}
+                  <motion.div
+                    className="absolute -top-8 -right-8 w-24 h-24 bg-aposs-orange rounded-full opacity-20 blur-2xl"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  />
+                  <motion.div
+                    className="absolute -bottom-8 -left-8 w-32 h-32 bg-aposs-blue rounded-full opacity-20 blur-2xl"
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.3, 0.2] }}
+                    transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+                  />
                 </div>
-              </div>
-            </div>
-            
-            {/* Main Title */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 text-white leading-tight">
-              Asian Politics
-              <span className="block bg-gradient-to-r from-[#00376c] via-[#17152b] to-[#00376c] bg-clip-text text-transparent">
-                Online Seminar Series
-              </span>
-            </h1>
-            
-            {/* Description */}
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed font-light">
-              A global venue for sharing cutting-edge research on Asian politics.
-            </p>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button asChild size="lg" variant="default" className="min-w-[200px] h-14 text-base font-semibold">
-                <Link href="/submit" className="no-underline text-white">
-                  <Upload className="h-5 w-5" />
-                  Submit Research
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="default" className="min-w-[200px] h-14 text-base font-semibold">
-                <Link href="/schedule" className="no-underline text-white">
-                  <Calendar className="h-5 w-5" />
-                  View Schedule
-                </Link>
-              </Button>
-            </div>
-            
-            {/* Stats */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm text-slate-700">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20">
-                <span className="font-semibold text-[#00376c] mr-2">104</span> seminars to date
-              </div>
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20">
-                Registration is required for all sessions
-              </div>
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20">
-                Organizers: <span className="ml-2 font-medium">Charles Crabtree · Trevor Incerti</span>
-              </div>
+              </AnimatedSection>
             </div>
           </div>
         </section>
 
-        {/* Next Seminar (compact card) */}
-        <section className="bg-white border-b border-slate-200">
-          <div className="mx-auto max-w-5xl px-6 py-10">
-            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5">
-              <div className="flex items-center gap-3 text-slate-700">
-                <Calendar className="w-5 h-5 text-[#00376c]" />
-                <span>Explore upcoming seminars on our schedule.</span>
-              </div>
-              <Button asChild variant="outline">
-                <Link href="/events" className="no-underline">View events</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section with enhanced visuals */}
-        <section className="relative py-24 bg-white">
-          <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-            {/* Header */}
-            <div className="mx-auto max-w-4xl text-center mb-20">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#00376c]/5 border border-[#00376c]/10 text-[#00376c] text-sm font-medium mb-6">
-                <Award className="w-4 h-4 mr-2" />
-                Building Excellence in Academic Community
-              </div>
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight mb-8">
-                <span className="bg-gradient-to-r from-[#00376c] to-[#17152b] bg-clip-text text-transparent">
-                  Connecting Scholars
-                </span>
-                <br />
-                <span className="text-[#17152b]">Across Continents</span>
-              </h2>
-              <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light">
-                We foster collaboration and scholarship on Asian politics, welcoming proposals from all researchers
-                while particularly championing <span className="text-[#00376c] font-semibold">early-career scholars</span>.
-              </p>
-            </div>
-
-            {/* Feature cards with enhanced design */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-              <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-all duration-500 transform group-hover:scale-105" />
-                <div className="relative bg-white rounded-3xl p-8 shadow-elegant hover:shadow-2xl transition-all duration-500 border border-blue-100">
-                  <div className="w-20 h-20 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                    <Globe className="h-10 w-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#17152b] mb-4">Global Community</h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    Connect with researchers from Asia, Europe, North America, and beyond. Our global network spans
-                    <span className="font-semibold text-[#00376c]"> 50+ countries</span> and growing.
-                  </p>
-                  <div className="mt-6 flex items-center text-sm text-[#00376c] font-medium">
-                    <span>Join the network</span>
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-all duration-500 transform group-hover:scale-105" />
-                <div className="relative bg-white rounded-3xl p-8 shadow-elegant hover:shadow-2xl transition-all duration-500 border border-blue-100">
-                  <div className="w-20 h-20 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                    <BookOpen className="h-10 w-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#17152b] mb-4">All Approaches Welcome</h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    Qualitative, quantitative, mixed methods, theoretical, and applied research. We embrace
-                    <span className="font-semibold text-[#00376c]"> methodological diversity</span> in Asian politics scholarship.
-                  </p>
-                  <div className="mt-6 flex items-center text-sm text-[#00376c] font-medium">
-                    <span>Explore diversity</span>
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-all duration-500 transform group-hover:scale-105" />
-                <div className="relative bg-white rounded-3xl p-8 shadow-elegant hover:shadow-2xl transition-all duration-500 border border-blue-100">
-                  <div className="w-20 h-20 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                    <Users className="h-10 w-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#17152b] mb-4">Early Career Focus</h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    Graduate students and early-career researchers receive priority consideration. We're committed to
-                    <span className="font-semibold text-[#00376c]"> nurturing the next generation</span> of scholars.
-                  </p>
-                  <div className="mt-6 flex items-center text-sm text-[#00376c] font-medium">
-                    <span>Start your journey</span>
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom CTA */}
-            <div className="mt-20 text-center">
-              <p className="text-xl text-gray-600 mb-8">
-                Ready to share your research with our community?
-              </p>
-              <Button asChild size="lg" variant="default">
-                <Link href="/submit" className="no-underline text-white">
-                  Submit Your Proposal
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* What We're Looking For - Enhanced */}
-        <section className="relative py-24 bg-gradient-to-b from-slate-50 to-white overflow-hidden">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5 pointer-events-none">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              }}
-            />
-          </div>
-
-          <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-            {/* Header */}
-            <div className="text-center mb-20">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#00376c]/5 border border-[#00376c]/10 text-[#00376c] text-sm font-medium mb-6">
-                <Star className="w-4 h-4 mr-2" />
-                Research Excellence Criteria
-              </div>
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight mb-8">
-                <span className="text-[#17152b]">What We're</span>
-                <br />
-                <span className="bg-gradient-to-r from-[#00376c] to-[#17152b] bg-clip-text text-transparent">Interested In</span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                We welcome diverse approaches to understanding Asian politics and its global implications.
-              </p>
-            </div>
-
-            {/* Enhanced content cards */}
-            <div className="max-w-5xl mx-auto space-y-8">
-              <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-blue-600/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
-                <div className="relative bg-white rounded-3xl p-10 shadow-elegant hover:shadow-2xl transition-all duration-500 border border-blue-100">
-                  <div className="flex items-start space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center shadow-lg">
-                        <Globe className="h-8 w-8 text-white" />
+        {/* Value props with animated cards */}
+        <section className="py-20 bg-aposs-gray-50">
+          <div className="container max-w-6xl">
+            <AnimatedSection animation="fade" className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-aposs-navy mb-4">Why APOSS?</h2>
+              <p className="text-lg text-aposs-gray-700 max-w-2xl mx-auto">A seminar series designed for the modern scholar</p>
+            </AnimatedSection>
+            
+            <AnimatedSection animation="slide-up" stagger className="grid md:grid-cols-3 gap-8">
+              {[{
+                icon: <Globe className="w-8 h-8" />,
+                color: 'aposs-blue',
+                title: 'Truly global',
+                body: 'Speakers and audience across Asia, Europe, and the Americas.',
+              }, {
+                icon: <BookOpen className="w-8 h-8" />,
+                color: 'aposs-orange',
+                title: 'Methods agnostic',
+                body: 'Qualitative, quantitative, mixed methods, and theory welcome.',
+              }, {
+                icon: <Award className="w-8 h-8" />,
+                color: 'aposs-red',
+                title: 'Early-career friendly',
+                body: 'Priority to graduate students and early-career scholars.',
+              }].map((item, idx) => (
+                <AnimatedItem key={idx}>
+                  <AnimatedCard delay={idx * 0.1} className="h-full">
+                    <div className={`w-16 h-16 rounded-2xl bg-${item.color} bg-opacity-10 flex items-center justify-center mb-6`}>
+                      <div className={`text-${item.color}`}>
+                        {item.icon}
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-[#17152b] mb-4">
-                        Research that advances our understanding of Asian politics
-                      </h3>
-                      <p className="text-lg text-gray-600 leading-relaxed">
-                        Research that draws on evidence from Asia to engage with broader disciplinary debates is also welcome.
-                        <span className="font-semibold text-[#00376c]"> Asia may feature as the main case or one of several cases</span>,
-                        contributing to comparative political science.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    <h3 className="text-2xl font-bold text-aposs-navy mb-3">{item.title}</h3>
+                    <p className="text-aposs-gray-700 leading-relaxed">{item.body}</p>
+                  </AnimatedCard>
+                </AnimatedItem>
+              ))}
+            </AnimatedSection>
+          </div>
+        </section>
 
-              <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-blue-600/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
-                <div className="relative bg-white rounded-3xl p-10 shadow-elegant hover:shadow-2xl transition-all duration-500 border border-blue-100">
-                  <div className="flex items-start space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center shadow-lg">
-                        <BookOpen className="h-8 w-8 text-white" />
+        {/* Upcoming seminars teaser */}
+        <section className="py-20 bg-white">
+          <div className="container max-w-6xl">
+            <AnimatedSection animation="fade" className="text-center mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold">Schedule</p>
+              </div>
+              <h2 className="text-4xl font-bold text-aposs-navy mb-4">Next seminars</h2>
+              <Link href="/schedule" className="inline-flex items-center gap-2 text-aposs-blue hover:text-aposs-navy font-semibold transition-colors">
+                Open full schedule <ArrowRight className="w-4 h-4" />
+              </Link>
+            </AnimatedSection>
+            
+            <AnimatedSection animation="slide-up" stagger className="grid md:grid-cols-2 gap-8">
+              {[1,2].map((i) => (
+                <AnimatedItem key={i}>
+                  <AnimatedCard delay={i * 0.1}>
+                    <div className="flex items-center gap-3 text-sm text-aposs-orange mb-4">
+                      <Calendar className="w-5 h-5" />
+                      <span className="font-semibold">See schedule page for confirmed dates</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-aposs-navy mb-3">Upcoming APOSS Seminar</h3>
+                    <p className="text-aposs-gray-700 mb-6 leading-relaxed">Check the schedule for the latest titles and Zoom links. We update presenters and topics as soon as they are confirmed.</p>
+                    <div className="flex gap-3">
+                      <AnimatedButton variant="secondary" href="/schedule">
+                        View details
+                      </AnimatedButton>
+                      <AnimatedButton variant="ghost" href="/register">
+                        <Users className="w-4 h-4" /> Register
+                      </AnimatedButton>
+                    </div>
+                  </AnimatedCard>
+                </AnimatedItem>
+              ))}
+            </AnimatedSection>
+          </div>
+        </section>
+
+        {/* How to participate - Process steps */}
+        <section className="py-20 bg-white relative overflow-hidden">
+          {/* Decorative element */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-aposs-orange opacity-5 rounded-full blur-3xl" />
+          
+          <div className="container max-w-6xl relative z-10">
+            <div className="grid lg:grid-cols-3 gap-12">
+              <AnimatedSection animation="slide-right" className="lg:col-span-1 space-y-6">
+                <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold">Present with APOSS</p>
+                <h2 className="text-4xl md:text-5xl font-bold text-aposs-navy leading-tight">Simple, transparent process.</h2>
+                <p className="text-lg text-aposs-gray-700 leading-relaxed">Submit your abstract, we review quickly, schedule together, and email you the Zoom link plus calendar-ready details.</p>
+              </AnimatedSection>
+              
+              <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
+                {[{
+                  number: '1',
+                  title: 'Submit',
+                  body: 'Short form: title, abstract, affiliation, keywords, and your availability.',
+                  color: 'aposs-navy'
+                }, {
+                  number: '2',
+                  title: 'Quick review',
+                  body: 'Organizers review fit and respond in a few days.',
+                  color: 'aposs-blue'
+                }, {
+                  number: '3',
+                  title: 'Schedule',
+                  body: 'Pick a slot; we create the event and send you the Zoom link.',
+                  color: 'aposs-red'
+                }, {
+                  number: '4',
+                  title: 'Present',
+                  body: 'Ten-minute presentation followed by discussant feedback and Q&A.',
+                  color: 'aposs-orange'
+                }].map((step, idx) => (
+                  <AnimatedCard key={idx} delay={idx * 0.1} className="relative">
+                    <div className="flex items-start gap-4">
+                      <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-${step.color} text-white flex items-center justify-center text-xl font-bold`}>
+                        {step.number}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-aposs-navy mb-2">{step.title}</h3>
+                        <p className="text-aposs-gray-700 leading-relaxed">{step.body}</p>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-[#17152b] mb-4">
-                        Various types of papers welcome
-                      </h3>
-                      <p className="text-lg text-gray-600 leading-relaxed">
-                        <span className="font-semibold text-[#00376c]">Article-length working papers</span>, concise excerpts from book manuscripts,
-                        research proposals, and pre-analysis plans. The paper should not already be published, allowing for meaningful
-                        feedback and discussion.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-blue-600/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
-                <div className="relative bg-white rounded-3xl p-10 shadow-elegant hover:shadow-2xl transition-all duration-500 border border-blue-100">
-                  <div className="flex items-start space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-r from-[#00376c] to-[#17152b] rounded-2xl flex items-center justify-center shadow-lg">
-                        <Zap className="h-8 w-8 text-white" />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-[#17152b] mb-4">
-                        Problem-driven research
-                      </h3>
-                      <p className="text-lg text-gray-600 leading-relaxed">
-                        Applications of new methods to advance our understanding of Asian politics are welcome, but
-                        <span className="font-semibold text-[#00376c]"> the contribution should not be purely methodological</span>.
-                        We prioritize research that addresses substantive political questions.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom highlight */}
-            <div className="mt-20 text-center">
-              <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200">
-                <span className="text-gray-700 font-medium">All methodological approaches welcomed</span>
-                <span className="mx-3 w-1 h-1 bg-gray-400 rounded-full" />
-                <span className="text-gray-700 font-medium">Theory and empirical work valued equally</span>
+                  </AnimatedCard>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Enhanced CTA Section */}
-        <section className="relative py-24 md:py-28 bg-[#17152b] on-brand-navy">
-          <div className="relative mx-auto max-w-4xl px-6 lg:px-8 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-white">
-              Ready to submit your proposal?
-            </h2>
-            <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-10 max-w-2xl mx-auto">
-              Share your work with a global community of scholars.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
-              <Button asChild size="lg" variant="default">
-                <Link href="/submit" className="no-underline text-white">
-                  Submit Now
-                </Link>
-              </Button>
-              <Button asChild variant="default" size="lg">
-                <Link href="/schedule" className="no-underline text-white">
-                  View Upcoming Sessions
-                </Link>
-              </Button>
+        {/* Organizers */}
+        <section className="py-20 bg-aposs-gray-50">
+          <div className="container max-w-6xl">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <AnimatedSection animation="slide-left">
+                <div className="space-y-6">
+                  <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold">Organizers</p>
+                  <h2 className="text-4xl md:text-5xl font-bold text-aposs-navy leading-tight">Charles Crabtree & Trevor Incerti</h2>
+                  <p className="text-lg text-aposs-gray-700 leading-relaxed">We built APOSS to make it effortless for scholars of Asian politics to share work, meet collaborators, and get actionable feedback.</p>
+                  <div className="flex gap-4">
+                    <AnimatedButton variant="secondary" href="/about">
+                      About APOSS
+                    </AnimatedButton>
+                    <AnimatedButton variant="ghost" href="/contact">
+                      Contact
+                    </AnimatedButton>
+                  </div>
+                </div>
+              </AnimatedSection>
+              
+              <AnimatedSection animation="slide-right">
+                <AnimatedCard className="bg-white">
+                  <h3 className="text-2xl font-bold text-aposs-navy mb-4">What we look for</h3>
+                  <ul className="space-y-4 text-aposs-gray-700">
+                    <li className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
+                      <span>Work that advances understanding of Asian politics or uses Asian cases comparatively.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
+                      <span>Clear research questions and room for feedback (works-in-progress welcome).</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
+                      <span>Methodological diversity and substantive contributions over pure methods pieces.</span>
+                    </li>
+                  </ul>
+                </AnimatedCard>
+              </AnimatedSection>
             </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="py-24 bg-white relative overflow-hidden">
+          {/* Animated background gradient */}
+          <div className="absolute inset-0 bg-aposs-gradient bg-200% animate-gradient opacity-10" />
+          
+          <div className="container max-w-4xl relative z-10">
+            <AnimatedSection animation="fade" className="text-center space-y-8">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold mb-4">Join us</p>
+                <h2 className="text-4xl md:text-6xl font-bold text-aposs-navy mb-6">Ready to share your research?</h2>
+                <p className="text-xl text-aposs-gray-700 max-w-2xl mx-auto leading-relaxed">Submit a paper, register to attend, or reach out with questions.</p>
+              </motion.div>
+              
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <AnimatedButton variant="primary" size="lg" href="/submit">
+                  <Upload className="w-5 h-5" /> Submit a paper
+                </AnimatedButton>
+                <AnimatedButton variant="secondary" size="lg" href="/register">
+                  <Users className="w-5 h-5" /> Register
+                </AnimatedButton>
+                <AnimatedButton variant="ghost" size="lg" href="/contact">
+                  Contact us <ArrowRight className="w-5 h-5" />
+                </AnimatedButton>
+              </motion.div>
+            </AnimatedSection>
           </div>
         </section>
       </main>

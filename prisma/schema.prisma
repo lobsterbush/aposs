@@ -97,44 +97,41 @@ model VerificationToken {
 }
 
 model Submission {
-  id                String           @id @default(cuid())
-  title             String
-  abstract          String
-  authorName        String
-  authorEmail       String
-  authorAffiliation String
-  authorBio         String?
-  coAuthors         String?          // JSON string of co-authors
-  
+  id                    String           @id @default(cuid())
+  title                 String
+  abstract              String
+  authorName            String
+  authorEmail           String
+  authorAffiliation     String
+  authorBio             String?
+  coAuthors             String?          // JSON string of co-authors
+
   // Research details
-  researchField     String
-  methodology       String?
-  keywords          String           // Comma-separated keywords
-  
-  // Paper upload
-  paperUrl          String?
-  paperFileName     String?
-  paperFileSize     Int?             // in bytes
-  paperUploadedAt   DateTime?
-  
+  researchField         String
+  methodology           String?
+  keywords              String           // Comma-separated keywords
+  isPublished           Boolean          @default(false)
+  presentationPreference String?         // e.g., preferred formats/timing
+  availabilityNotes     String?
+
   // Submission metadata
-  status            SubmissionStatus @default(PENDING)
-  submittedAt       DateTime         @default(now())
-  reviewedAt        DateTime?
-  scheduledAt       DateTime?
-  presentedAt       DateTime?
-  
+  status                SubmissionStatus @default(PENDING)
+  submittedAt           DateTime         @default(now())
+  reviewedAt            DateTime?
+  scheduledAt           DateTime?
+  presentedAt           DateTime?
+
   // Admin notes
-  adminNotes        String?
-  reviewerComments  String?
-  
+  adminNotes            String?
+  reviewerComments      String?
+
   // Relations
-  eventId           String?          @unique
-  event             Event?           @relation(fields: [eventId], references: [id])
-  
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  
+  eventId               String?          @unique
+  event                 Event?           @relation(fields: [eventId], references: [id])
+
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
   @@map("submissions")
 }
 
@@ -170,20 +167,6 @@ model Event {
   updatedAt       DateTime    @updatedAt
   
   @@map("events")
-}
-
-model BlogPost {
-  id        String   @id @default(cuid())
-  title     String
-  slug      String   @unique
-  content   String
-  excerpt   String?
-  published Boolean  @default(false)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  @@map("blog_posts")
 }
 
 model Settings {

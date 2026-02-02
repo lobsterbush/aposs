@@ -1,19 +1,25 @@
+'use client'
+
 import { Header } from '@/components/layout/header'
 import { PageHero } from '@/components/layout/PageHero'
+import { AnimatedCard } from '@/components/animated'
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fafafa]">
       <Header />
-      <PageHero title="Terms of Service" />
-      <main className="mx-auto max-w-3xl px-6 pt-8 pb-16 space-y-8">
-        <p className="text-lg text-gray-600">
+      <div style={{ marginTop: '80px' }}>
+        <PageHero title="Terms of Service" />
+      </div>
+      <main className="mx-auto max-w-4xl px-6 py-16">
+        <AnimatedCard>
+        <p className="text-lg text-[#737373] mb-8">
           Last updated: November 11, 2025
         </p>
         
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Acceptance of Terms</h2>
-          <p className="text-gray-700">
+          <h2 className="text-2xl font-bold text-[#17152b]">
+          <p className="text-[#404040] leading-relaxed">
             By accessing or using the Asian Politics Online Seminar Series (APOSS) website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
           </p>
         </section>
@@ -23,7 +29,7 @@ export default function TermsPage() {
           <p className="text-gray-700">
             All participants in APOSS seminars and services must:
           </p>
-          <ul className="list-disc pl-6 text-gray-700 space-y-2">
+          <ul className="list-disc pl-6 text-[#404040] space-y-2">
             <li>Treat all participants with respect and professionalism</li>
             <li>Provide constructive, thoughtful feedback</li>
             <li>Respect the confidentiality of unpublished work</li>
@@ -101,6 +107,7 @@ export default function TermsPage() {
             <a href="mailto:contact@aposs.org" className="font-semibold text-[#00376c] underline">contact@aposs.org</a>.
           </p>
         </section>
+        </AnimatedCard>
       </main>
     </div>
   )

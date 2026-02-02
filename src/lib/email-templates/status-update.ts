@@ -4,6 +4,7 @@ interface StatusUpdateData {
   status: 'UNDER_REVIEW' | 'ACCEPTED' | 'REJECTED' | 'SCHEDULED'
   reviewerComments?: string
   scheduledAt?: Date
+  zoomJoinUrl?: string | null
 }
 
 export function generateStatusUpdateEmail(data: StatusUpdateData): string {
@@ -76,23 +77,27 @@ export function generateStatusUpdateEmail(data: StatusUpdateData): string {
         minute: '2-digit',
         timeZoneName: 'short'
       }) : 'TBD'
+      const zoomBlock = data.zoomJoinUrl
+        ? `<p style="margin: 16px 0 4px 0;"><strong>Zoom:</strong> <a href="${data.zoomJoinUrl}" style="color:#7c3aed;">Join meeting</a></p>`
+        : `<p style="margin: 16px 0 4px 0; color:#4b5563;">Zoom link will follow once confirmed.</p>`
       nextSteps = `
         <p><strong>Your seminar presentation is scheduled for:</strong></p>
         <div style="background: #f3f4f6; border: 2px solid #7c3aed; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center;">
           <p style="font-size: 18px; font-weight: 600; color: #7c3aed; margin: 0;">${scheduledDate}</p>
+          ${zoomBlock}
         </div>
         
         <p><strong>What you need to do:</strong></p>
         <ol>
-          <li><strong>Submit your paper:</strong> Please send us your paper (PDF format) at least 7 days before the presentation date. We will distribute it to discussants.</li>
+          <li><strong>Send your latest paper:</strong> Please email your PDF at least 7 days before the date so we can circulate to discussants.</li>
           <li><strong>Prepare a 10-minute presentation:</strong> Focus on your main argument, methods, and findings.</li>
-          <li><strong>Join the Zoom meeting:</strong> You'll receive the Zoom link 24 hours before the session.</li>
-          <li><strong>Engage with discussants:</strong> After your presentation, 2-3 discussants will provide comments, followed by open discussion.</li>
+          <li><strong>Join on time:</strong> Use the Zoom link above; we start promptly.</li>
+          <li><strong>Engage with discussants:</strong> Expect comments followed by open discussion.</li>
         </ol>
         
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 15px; margin: 20px 0;">
           <p style="margin: 0; font-size: 14px; color: #1e40af;">
-            <strong>Tips for a successful presentation:</strong> Keep your presentation concise and focus on areas where you'd most value feedback. The Q&A is the most valuable part!
+            <strong>Tip:</strong> Keep slides lean; spend more time on puzzles where feedback helps most.
           </p>
         </div>
         

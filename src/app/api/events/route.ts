@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { sendEmail } from '@/lib/email'
+import { generateStatusUpdateEmail } from '@/lib/email-templates/status-update'
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,13 +34,28 @@ export async function POST(request: NextRequest) {
     })
 
     // Update the submission status
-    await prisma.submission.update({
+    const updatedSubmission = await prisma.submission.update({
       where: { id: submissionId },
       data: {
         status: 'SCHEDULED',
         scheduledAt: new Date(scheduledAt),
         eventId: event.id
       }
+    })
+
+    // Notify presenter
+    const scheduleEmail = generateStatusUpdateEmail({
+      authorName: updatedSubmission.authorName,
+      title: updatedSubmission.title,
+      status: 'SCHEDULED',
+      scheduledAt: event.scheduledAt,
+      zoomJoinUrl: event.zoomJoinUrl || undefined
+    })
+
+    await sendEmail({
+      to: updatedSubmission.authorEmail,
+      subject: 'Your APOSS presentation is scheduled',
+      html: scheduleEmail
     })
 
     return NextResponse.json({ 

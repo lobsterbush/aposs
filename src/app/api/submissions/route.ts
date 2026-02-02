@@ -20,10 +20,9 @@ export async function POST(request: NextRequest) {
         researchField: data.researchField,
         methodology: data.methodology || null,
         keywords: data.keywords,
-        paperUrl: data.paperUrl || null,
-        paperFileName: data.paperFileName || null,
-        paperFileSize: data.paperFileSize || null,
-        paperUploadedAt: data.paperUploadedAt ? new Date(data.paperUploadedAt) : null,
+        isPublished: Boolean(data.isPublished),
+        presentationPreference: data.presentationPreference || null,
+        availabilityNotes: data.availabilityNotes || null,
         status: 'PENDING'
       }
     })
@@ -88,12 +87,18 @@ export async function GET() {
         authorName: true,
         authorEmail: true,
         authorAffiliation: true,
+        authorBio: true,
+        coAuthors: true,
+        researchField: true,
+        methodology: true,
+        keywords: true,
+        isPublished: true,
+        presentationPreference: true,
+        availabilityNotes: true,
         status: true,
         submittedAt: true,
         reviewedAt: true,
-        scheduledAt: true,
-        paperUrl: true,
-        paperFileName: true
+        scheduledAt: true
       }
     })
 

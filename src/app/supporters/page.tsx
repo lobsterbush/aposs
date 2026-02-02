@@ -1,15 +1,20 @@
+'use client'
+
 import { Header } from '@/components/layout/header'
 import { PageHero } from '@/components/layout/PageHero'
+import { AnimatedCard } from '@/components/animated'
 
 export default function SupportersPage() {
   return (
     <>
       <Header />
-      <PageHero title="Funders & Supporters" subtitle="We are grateful for the generous support that makes APOSS possible" />
-      <main className="min-h-screen bg-white pt-8 pb-16">
+      <div style={{ marginTop: '80px' }}>
+        <PageHero title="Funders & Supporters" subtitle="We are grateful for the generous support that makes APOSS possible" />
+      </div>
+      <main className="min-h-screen bg-[#fafafa] py-16">
         <section className="mx-auto max-w-5xl px-6">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[
             {
               name: 'The East Asia Research Foundation',
@@ -32,25 +37,25 @@ export default function SupportersPage() {
               blurb: 'Community partnership and outreach.',
             },
           ].map((f, i) => (
-            <article key={i} className="rounded-2xl border border-gray-200 shadow-sm p-6 bg-white">
-              <h2 className="text-xl font-bold text-gray-900">
-                <a href={f.url} target="_blank" rel="noopener noreferrer" className="underline">
-                  {f.name}
+            <AnimatedCard key={i} delay={i * 0.1}>
+              <h2 className="text-xl font-bold text-[#17152b] mb-3">
+                <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-[#00376c] hover:text-[#17152b] transition-colors">
+                  {f.name} →
                 </a>
               </h2>
-              <p className="text-gray-700 mt-2">{f.blurb}</p>
-            </article>
+              <p className="text-[#404040] leading-relaxed">{f.blurb}</p>
+            </AnimatedCard>
           ))}
         </div>
 
-          <div className="mt-12 rounded-2xl border border-gray-200 bg-gray-50 p-6 space-y-2">
-            <h3 className="text-lg font-semibold text-gray-900">Thanks</h3>
-            <p className="text-gray-700">We are grateful to the APOSS community of presenters, discussants, and attendees, and to our partner institutions for their support.</p>
-            <h3 className="text-lg font-semibold text-gray-900 mt-4">Interested in supporting APOSS?</h3>
-            <p className="text-gray-700">
+          <AnimatedCard delay={0.4} className="mt-12 bg-[#00376c]/5 border-[#00376c]/20">
+            <h3 className="text-lg font-semibold text-[#17152b] mb-3">Thanks</h3>
+            <p className="text-[#404040] leading-relaxed mb-4">We are grateful to the APOSS community of presenters, discussants, and attendees, and to our partner institutions for their support.</p>
+            <h3 className="text-lg font-semibold text-[#17152b] mb-3">Interested in supporting APOSS?</h3>
+            <p className="text-[#404040] leading-relaxed">
               Contact us to discuss sponsorships, hosting, and in-kind support opportunities.
             </p>
-          </div>
+          </AnimatedCard>
         </section>
       </main>
     </>

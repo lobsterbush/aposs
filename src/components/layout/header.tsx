@@ -2,13 +2,23 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Home, Calendar, Upload, Settings, ArrowRight, Users, BookOpen } from 'lucide-react'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Menu, X, Home, Calendar, Upload, Settings, Users, BookOpen } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 export function Header() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const navigation = [
     { name: 'Home', href: '/', icon: Home },
@@ -22,98 +32,127 @@ export function Header() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100]">
-      {/* Flat header background */}
-      <div className="absolute inset-0 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-b border-slate-200 pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-6 z-10">
+    <motion.header 
+      className={`fixed top-0 left-0 right-0 z-[100] bg-white transition-all duration-300 ${
+        scrolled ? 'shadow-lg border-b border-aposs-gray-200' : 'border-b-2 border-aposs-navy'
+      }`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
+      <div className="container">
         <div className="flex items-center justify-between h-20">
-          {/* Logo - Simple text logo for header */}
-          <Link href="/" className="flex items-center no-underline group">
-            <span className="text-2xl font-bold text-[#17152b] group-hover:text-[#00376c] transition-colors">
+          {/* Logo with icon */}
+          <Link href="/" className="flex items-center gap-3 no-underline group">
+            <div className="relative w-10 h-10">
+              <Image
+                src="/branding/Navy Circle Icon ht 2000px.png"
+                alt="APOSS"
+                fill
+                className="object-contain transition-transform group-hover:scale-110"
+              />
+            </div>
+            <span className="text-2xl font-black text-aposs-navy group-hover:text-aposs-blue transition-colors">
               APOSS
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-<nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href
 
               return (
-                <Link
+                <motion.div
                   key={item.name}
-                  href={item.href}
-className={`group relative px-4 py-2 rounded-md font-medium text-sm transition-colors no-underline ${
-                    isActive
-                      ? 'text-[#17152b] font-semibold'
-                      : 'text-slate-700 hover:text-[#00376c]'
-                  }`}
+                  whileHover={{ y: -2 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                 >
-                  <div className="flex items-center space-x-2">
-                    <span>{item.name}</span>
-                    {!isActive && <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />}
-                  </div>
-                </Link>
+                  <Link
+                    href={item.href}
+                    className={`no-underline px-4 py-2 font-semibold text-sm rounded-lg transition-colors ${
+                      isActive
+                        ? 'bg-aposs-navy text-white'
+                        : 'text-aposs-gray-700 hover:bg-aposs-gray-100 hover:text-aposs-navy'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </motion.div>
               )
             })}
           </nav>
 
-{/* CTA Button */}
-<div className="hidden md:flex items-center space-x-3">
-            <Button asChild variant="default" size="default">
-              <Link href="/submit" className="no-underline text-white">
+          {/* CTA Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link href="/submit" className="no-underline inline-flex items-center gap-2 bg-aposs-orange text-white px-5 py-2.5 rounded-lg hover:bg-aposs-red transition-colors font-semibold shadow-sm">
                 <Upload className="w-4 h-4" />
                 Submit
               </Link>
-            </Button>
-            <Button asChild variant="outline" size="default">
-              <Link href="/admin" className="no-underline">
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link href="/admin" className="no-underline inline-flex items-center gap-2 bg-white text-aposs-navy px-5 py-2.5 border-2 border-aposs-navy rounded-lg hover:bg-aposs-navy hover:text-white transition-colors font-semibold">
                 <Settings className="w-4 h-4" />
                 Admin
               </Link>
-            </Button>
+            </motion.div>
           </div>
 
           {/* Mobile menu button */}
-          <button
+          <motion.button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200 transition-colors relative z-20"
+            className="md:hidden p-3 bg-aposs-navy text-white hover:bg-aposs-blue rounded-lg transition-colors"
+            whileTap={{ scale: 0.95 }}
           >
             {isMobileMenuOpen ? (
               <X className="w-5 h-5" />
             ) : (
               <Menu className="w-5 h-5" />
             )}
-          </button>
+          </motion.button>
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 py-4 bg-white/95 backdrop-blur-md">
-            <nav className="space-y-2">
-              {navigation.map((item) => {
-                const Icon = item.icon
-                const isActive = pathname === item.href
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              className="md:hidden border-t border-aposs-gray-200 py-4 bg-white"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <nav className="space-y-1">
+                {navigation.map((item, idx) => {
+                  const Icon = item.icon
+                  const isActive = pathname === item.href
 
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 ${
-                      isActive ? 'bg-gray-100 text-slate-900' : 'text-slate-800 hover:bg-slate-100'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span>{item.name}</span>
-                  </Link>
-                )
-              })}
-            </nav>
-          </div>
-        )}
+                  return (
+                    <motion.div
+                      key={item.name}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`no-underline flex items-center gap-3 px-4 py-3 font-semibold transition-colors rounded-lg mx-2 ${
+                          isActive ? 'bg-aposs-navy text-white' : 'text-aposs-gray-700 hover:bg-aposs-gray-100 hover:text-aposs-navy'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span>{item.name}</span>
+                      </Link>
+                    </motion.div>
+                  )
+                })}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </header>
+    </motion.header>
   )
 }

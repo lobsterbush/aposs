@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Header } from '@/components/layout/header'
 import { PageHero } from '@/components/layout/PageHero'
-import { Button } from '@/components/ui/button'
+import { AnimatedCard, AnimatedButton } from '@/components/animated'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -40,36 +40,44 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fafafa]">
       <Header />
-      <PageHero title="Register" subtitle="Registration is required for all sessions" />
-      <main className="mx-auto max-w-2xl px-6 pt-8 pb-16">
+      <div style={{ marginTop: '80px' }}>
+        <PageHero title="Register" subtitle="Registration is required for all sessions" />
+      </div>
+      <main className="mx-auto max-w-2xl px-6 py-16">
 
         {success ? (
-          <div className="rounded-xl border border-green-200 bg-green-50 p-6 text-green-800">Thank you! You're registered. We'll email you session details.</div>
+          <AnimatedCard className="bg-green-50 border-green-200">
+            <p className="text-green-800 font-semibold">Thank you! You're registered. We'll email you session details.</p>
+          </AnimatedCard>
         ) : (
-          <form onSubmit={submit} className="space-y-5 bg-white rounded-2xl p-6 border border-gray-200">
-            {error && <div className="rounded-lg border border-red-200 bg-red-50 text-red-800 p-3 text-sm">{error}</div>}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Dr. Jane Smith" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="jane@university.edu" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Affiliation</label>
-              <Input value={affiliation} onChange={(e) => setAffiliation(e.target.value)} placeholder="University / Institute" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Interests (optional)</label>
-              <Textarea value={interests} onChange={(e) => setInterests(e.target.value)} rows={3} placeholder="Topics, subfields, regions…" />
-            </div>
-            <div className="flex justify-end">
-              <Button type="submit" disabled={loading}>{loading ? 'Submitting…' : 'Register'}</Button>
-            </div>
-          </form>
+          <AnimatedCard>
+            {error && <div className="rounded-lg border border-red-200 bg-red-50 text-red-800 p-3 text-sm mb-5">{error}</div>}
+            <form onSubmit={submit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-[#17152b] mb-2">Full Name</label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Dr. Jane Smith" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-[#17152b] mb-2">Email</label>
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="jane@university.edu" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-[#17152b] mb-2">Affiliation</label>
+                <Input value={affiliation} onChange={(e) => setAffiliation(e.target.value)} placeholder="University / Institute" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-[#17152b] mb-2">Interests (optional)</label>
+                <Textarea value={interests} onChange={(e) => setInterests(e.target.value)} rows={3} placeholder="Topics, subfields, regions…" />
+              </div>
+              <div className="flex justify-end">
+                <AnimatedButton variant="primary" type="submit" disabled={loading}>
+                  {loading ? 'Submitting…' : 'Register'}
+                </AnimatedButton>
+              </div>
+            </form>
+          </AnimatedCard>
         )}
       </main>
     </div>
