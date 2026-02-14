@@ -17,6 +17,7 @@ export default async function EventsIndexPage() {
     presenter: 'Dr. Sample Researcher',
     status: 'SCHEDULED',
   }]
+  const useSample = process.env.NODE_ENV === 'development'
 
   if (process.env.DATABASE_URL) {
     try {
@@ -29,17 +30,16 @@ export default async function EventsIndexPage() {
         .filter(r => r.status === 'SCHEDULED' || r.status === 'COMPLETED')
         .map(r => ({ id: r.id, title: r.title, scheduledAt: r.scheduledAt as Date, presenter: r.presenter, status: r.status as 'SCHEDULED' | 'COMPLETED' }))
     } catch {
-      events = sample
+      events = useSample ? sample : []
     }
   } else {
-    events = sample
+    events = useSample ? sample : []
   }
 
-  // Add sample tags and serialize dates for client
+  // Serialize dates for client
   const initial = events.map(e => ({
     ...e,
     scheduledAt: e.scheduledAt.toISOString(),
-    tags: ['Comparative', 'Governance', 'East Asia'],
   }))
 
   return (

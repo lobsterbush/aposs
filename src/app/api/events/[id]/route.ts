@@ -4,6 +4,14 @@ import { prisma } from '@/lib/db'
 import type { Prisma } from '@prisma/client'
 import { sendEmail } from '@/lib/email'
 import { generateStatusUpdateEmail } from '@/lib/email-templates/status-update'
+import { requireAdmin } from '@/lib/auth'
+import { z } from 'zod'
+
+const eventUpdateSchema = z.object({
+  zoomJoinUrl: z.union([z.string().url(), z.literal(''), z.null()]).optional(),
+  scheduledAt: z.string().optional(),
+  status: z.enum(['SCHEDULED', 'ONGOING', 'COMPLETED', 'CANCELLED']).optional(),
+})
 
 export async function PATCH(
   request: Request,
@@ -11,7 +19,12 @@ export async function PATCH(
 ) {
   const { id } = context.params
   try {
-    const data = await request.json()
+    const session = await requireAdmin()
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
+    const payload = await request.json()
+    const data = eventUpdateSchema.parse(payload)
     const { zoomJoinUrl, scheduledAt, status } = data as {
       zoomJoinUrl?: string
       scheduledAt?: string
@@ -76,6 +89,9 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, event })
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ success: false, message: 'Invalid request', issues: error.issues }, { status: 400 })
+    }
     console.error('Error updating event:', error)
     return NextResponse.json({ success: false, message: 'Failed to update event' }, { status: 500 })
   }

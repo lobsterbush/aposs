@@ -12,26 +12,28 @@ function LoginForm() {
   const verify = searchParams.get('verify')
 
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
 
+  const authMode = process.env.NEXT_PUBLIC_AUTH_MODE || 'email'
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
     
     try {
-      const res = await signIn('email', {
-        email,
-        callbackUrl,
-        redirect: false,
-      })
+      const res = authMode === 'credentials'
+        ? await signIn('credentials', { email, password, callbackUrl, redirect: false })
+        : await signIn('email', { email, callbackUrl, redirect: false })
       
       if (res?.error) {
-        setError('Failed to send login link. Please check your email address.')
+        setError(authMode === 'credentials'
+          ? 'Invalid credentials. Please check your email and password.'
+          : 'Failed to send login link. Please check your email address.')
       } else {
-        setEmailSent(true)
+        if (authMode !== 'credentials') setEmailSent(true)
       }
     } catch {
       setError('An error occurred. Please try again.')
@@ -80,7 +82,9 @@ function LoginForm() {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Admin Login</h1>
-      <p className="text-sm text-gray-600 mb-6">Enter your email to receive a secure sign-in link.</p>
+      <p className="text-sm text-gray-600 mb-6">
+        {authMode === 'credentials' ? 'Enter your email and password to sign in.' : 'Enter your email to receive a secure sign-in link.'}
+      </p>
 
       {error && (
         <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
@@ -90,8 +94,9 @@ function LoginForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <label htmlFor="admin-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
           <input
+            id="admin-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -100,13 +105,27 @@ function LoginForm() {
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00376c]"
           />
         </div>
+        {authMode === 'credentials' && (
+          <div>
+            <label htmlFor="admin-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input
+              id="admin-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Your admin password"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00376c]"
+            />
+          </div>
+        )}
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? 'Sending link…' : 'Send Magic Link'}
+          {loading ? (authMode === 'credentials' ? 'Signing in…' : 'Sending link…') : (authMode === 'credentials' ? 'Sign In' : 'Send Magic Link')}
         </Button>
       </form>
       <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
         <p className="text-xs text-blue-800">
-          <strong>Note:</strong> Only authorized admin email addresses can sign in. You'll receive an email with a secure sign-in link.
+          <strong>Note:</strong> Only authorized admin email addresses can sign in.
         </p>
       </div>
     </div>

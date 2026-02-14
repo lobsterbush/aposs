@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Calendar, Clock, User, ExternalLink } from 'lucide-react'
+import { Calendar, Clock, User } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { PageHero } from '@/components/layout/PageHero'
 import { AnimatedCard } from '@/components/animated'
@@ -14,7 +14,6 @@ interface Event {
   scheduledAt: string
   presenter: string
   presenterEmail?: string
-  zoomJoinUrl?: string
   status: 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'
 }
 
@@ -28,7 +27,7 @@ export default function SchedulePage() {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('/api/events')
+      const response = await fetch('/api/public/events')
       const data = await response.json()
       if (data.success) {
         setEvents(data.events.filter((event: Event) => event.status !== 'CANCELLED'))
@@ -92,7 +91,7 @@ export default function SchedulePage() {
         {/* Info Note */}
         <AnimatedCard className="mb-6 bg-[#00376c]/5 border-[#00376c]/20">
           <p className="text-sm text-[#404040]">
-            Times are presented in JST by default for historical reasons. Sessions featuring European scholars may be shown in EST for convenience. Registration is required for all sessions.
+            Times are shown in your local time zone. Registration is required for all sessions.
           </p>
         </AnimatedCard>
 
@@ -129,16 +128,9 @@ export default function SchedulePage() {
                       )}
                     </div>
                     <div className="mt-4 lg:mt-0 lg:ml-6">
-                      {event.zoomJoinUrl ? (
-                        <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" className="no-underline inline-flex items-center gap-2 bg-[#17152b] text-white px-6 py-3 rounded-lg hover:bg-[#00376c] transition-colors font-semibold">
-                          Join Meeting
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      ) : (
-                        <span className="inline-flex items-center px-4 py-2 bg-[#f5f5f5] border border-[#e5e5e5] text-sm font-semibold text-[#737373] rounded-lg">
-                          Meeting Link TBA
-                        </span>
-                      )}
+                      <span className="inline-flex items-center px-4 py-2 bg-[#f5f5f5] border border-[#e5e5e5] text-sm font-semibold text-[#737373] rounded-lg">
+                        Registration required
+                      </span>
                     </div>
                   </div>
                 </AnimatedCard>

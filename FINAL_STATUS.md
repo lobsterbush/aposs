@@ -26,7 +26,7 @@ Every page on the site now has consistent APOSS styling with animations.
 ### 2. **About** (`/about`)
 - ✅ Gradient PageHero with blobs
 - ✅ Organizer cards with links
-- ✅ Trevor Incerti bio section
+- ✅ Organizer bio section
 - ✅ Mission & values with checkmarks
 - ✅ Guidelines teaser
 
@@ -43,7 +43,7 @@ Every page on the site now has consistent APOSS styling with animations.
 - ✅ Gradient PageHero
 - ✅ Icon-based general inquiries section
 - ✅ Submit research CTA
-- ✅ Organizer contact cards
+- ✅ Organizer contact card
 - ✅ Stay connected section
 
 ### 5. **Schedule** (`/schedule`)
@@ -57,7 +57,7 @@ Every page on the site now has consistent APOSS styling with animations.
 ### 6. **Organizers** (`/organizers`)
 - ✅ Gradient PageHero
 - ✅ Charles Crabtree card with bio
-- ✅ Trevor Incerti card with bio
+- ✅ Organizer card with bio
 - ✅ Links to personal websites
 - ✅ Staggered animation delays
 

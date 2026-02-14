@@ -3,6 +3,13 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { sendEmail } from '@/lib/email'
 import { generateStatusUpdateEmail } from '@/lib/email-templates/status-update'
+import { requireAdmin } from '@/lib/auth'
+import { z } from 'zod'
+
+const submissionUpdateSchema = z.object({
+  status: z.enum(['PENDING', 'UNDER_REVIEW', 'ACCEPTED', 'SCHEDULED', 'PRESENTED', 'REJECTED']),
+  reviewerComments: z.string().optional().nullable(),
+})
 
 export async function PATCH(
   request: Request,
@@ -10,11 +17,13 @@ export async function PATCH(
 ) {
   const { id } = context.params
   try {
-    const data = await request.json()
-    const { status, reviewerComments } = data as { 
-      status: 'PENDING' | 'UNDER_REVIEW' | 'ACCEPTED' | 'SCHEDULED' | 'PRESENTED' | 'REJECTED'
-      reviewerComments?: string
+    const session = await requireAdmin()
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
     }
+    const payload = await request.json()
+    const data = submissionUpdateSchema.parse(payload)
+    const { status, reviewerComments } = data
 
     const submission = await prisma.submission.update({
       where: { id },
@@ -69,6 +78,9 @@ export async function PATCH(
     })
 
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ success: false, message: 'Invalid request', issues: error.issues }, { status: 400 })
+    }
     console.error('Error updating submission:', error)
     return NextResponse.json({ 
       success: false, 
@@ -83,6 +95,10 @@ export async function GET(
 ) {
   const { id } = context.params
   try {
+    const session = await requireAdmin()
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
     const submission = await prisma.submission.findUnique({
       where: { id },
       include: {

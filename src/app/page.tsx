@@ -1,12 +1,63 @@
 'use client'
+import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 import { Header } from '@/components/layout/header'
 import { Calendar, Users, Globe, BookOpen, Award, Upload, ArrowRight } from 'lucide-react'
 import { AnimatedSection, AnimatedCard, AnimatedButton, FloatingLogo, AnimatedItem } from '@/components/animated'
 import { motion } from 'framer-motion'
+interface PublicEvent {
+  id: string
+  title: string
+  description?: string
+  scheduledAt: string
+  presenter: string
+  status: 'SCHEDULED' | 'COMPLETED'
+}
 
 export default function Home() {
+  const [events, setEvents] = useState<PublicEvent[]>([])
+  const [eventsLoading, setEventsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch('/api/public/events')
+        const data = await res.json()
+        if (data.success && Array.isArray(data.events)) {
+          setEvents(data.events)
+        }
+      } catch {
+        setEvents([])
+      } finally {
+        setEventsLoading(false)
+      }
+    }
+
+    fetchEvents()
+  }, [])
+
+  const upcomingEvents = events
+    .filter(event => event.status === 'SCHEDULED' && new Date(event.scheduledAt) > new Date())
+    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime())
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+  }
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    })
+  }
   return (
     <>
       <Header />
@@ -25,7 +76,7 @@ export default function Home() {
                   transition={{ duration: 0.6 }}
                 >
                   <h1 className="text-5xl md:text-7xl font-bold text-aposs-navy leading-tight mb-6">
-                    Asian Politics Online Seminar Series
+                    Asia Pacific Online Seminar Series
                   </h1>
                   <p className="text-xl text-aposs-gray-700 leading-relaxed max-w-2xl">
                     Weekly online seminars connecting researchers across continents. Concise talks, sharp feedback, and an inclusive audience.
@@ -46,19 +97,6 @@ export default function Home() {
                   </AnimatedButton>
                 </motion.div>
 
-                <motion.div 
-                  className="flex flex-col gap-2 text-sm"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                >
-                  <div className="text-aposs-gray-700">
-                    <span className="font-bold text-aposs-navy">104 seminars delivered</span>
-                  </div>
-                  <div className="text-aposs-gray-700">
-                    Global, online, free
-                  </div>
-                </motion.div>
               </AnimatedSection>
 
               <AnimatedSection animation="slide-right" className="flex justify-center">
@@ -96,27 +134,25 @@ export default function Home() {
             
             <AnimatedSection animation="slide-up" stagger className="grid md:grid-cols-3 gap-8">
               {[{
-                icon: <Globe className="w-8 h-8" />,
-                color: 'aposs-blue',
+                icon: <Globe className="w-8 h-8 text-white" />,
+                bg: '#00376c',
                 title: 'Truly global',
                 body: 'Speakers and audience across Asia, Europe, and the Americas.',
               }, {
-                icon: <BookOpen className="w-8 h-8" />,
-                color: 'aposs-orange',
+                icon: <BookOpen className="w-8 h-8 text-white" />,
+                bg: '#dc7510',
                 title: 'Methods agnostic',
                 body: 'Qualitative, quantitative, mixed methods, and theory welcome.',
               }, {
-                icon: <Award className="w-8 h-8" />,
-                color: 'aposs-red',
+                icon: <Award className="w-8 h-8 text-white" />,
+                bg: '#ba3828',
                 title: 'Early-career friendly',
                 body: 'Priority to graduate students and early-career scholars.',
               }].map((item, idx) => (
                 <AnimatedItem key={idx}>
                   <AnimatedCard delay={idx * 0.1} className="h-full">
-                    <div className={`w-16 h-16 rounded-2xl bg-${item.color} bg-opacity-10 flex items-center justify-center mb-6`}>
-                      <div className={`text-${item.color}`}>
-                        {item.icon}
-                      </div>
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: item.bg }}>
+                      {item.icon}
                     </div>
                     <h3 className="text-2xl font-bold text-aposs-navy mb-3">{item.title}</h3>
                     <p className="text-aposs-gray-700 leading-relaxed">{item.body}</p>
@@ -141,26 +177,55 @@ export default function Home() {
             </AnimatedSection>
             
             <AnimatedSection animation="slide-up" stagger className="grid md:grid-cols-2 gap-8">
-              {[1,2].map((i) => (
-                <AnimatedItem key={i}>
-                  <AnimatedCard delay={i * 0.1}>
-                    <div className="flex items-center gap-3 text-sm text-aposs-orange mb-4">
-                      <Calendar className="w-5 h-5" />
-                      <span className="font-semibold">See schedule page for confirmed dates</span>
-                    </div>
-                    <h3 className="text-2xl font-bold text-aposs-navy mb-3">Upcoming APOSS Seminar</h3>
-                    <p className="text-aposs-gray-700 mb-6 leading-relaxed">Check the schedule for the latest titles and Zoom links. We update presenters and topics as soon as they are confirmed.</p>
+              {eventsLoading ? (
+                <AnimatedItem>
+                  <AnimatedCard>
+                    <p className="text-aposs-gray-700">Loading upcoming seminars…</p>
+                  </AnimatedCard>
+                </AnimatedItem>
+              ) : upcomingEvents.length > 0 ? (
+                upcomingEvents.slice(0, 2).map((event, i) => (
+                  <AnimatedItem key={event.id}>
+                    <AnimatedCard delay={i * 0.1}>
+                      <div className="flex items-center gap-3 text-sm text-aposs-orange mb-4">
+                        <Calendar className="w-5 h-5" />
+                        <span className="font-semibold">
+                          {formatDate(event.scheduledAt)} · {formatTime(event.scheduledAt)}
+                        </span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-aposs-navy mb-2">{event.title}</h3>
+                      <p className="text-sm text-aposs-gray-700 mb-3">Presenter: {event.presenter}</p>
+                      {event.description && (
+                        <p className="text-aposs-gray-700 mb-6 leading-relaxed">{event.description}</p>
+                      )}
+                      <div className="flex gap-3">
+                        <AnimatedButton variant="secondary" href="/schedule">
+                          View details
+                        </AnimatedButton>
+                        <AnimatedButton variant="ghost" href="/register">
+                          <Users className="w-4 h-4" /> Register
+                        </AnimatedButton>
+                      </div>
+                    </AnimatedCard>
+                  </AnimatedItem>
+                ))
+              ) : (
+                <AnimatedItem>
+                  <AnimatedCard>
+                    <p className="text-aposs-gray-700 mb-4 leading-relaxed">
+                      No upcoming seminars are scheduled at the moment.
+                    </p>
                     <div className="flex gap-3">
                       <AnimatedButton variant="secondary" href="/schedule">
-                        View details
+                        View schedule
                       </AnimatedButton>
                       <AnimatedButton variant="ghost" href="/register">
-                        <Users className="w-4 h-4" /> Register
+                        <Users className="w-4 h-4" /> Register for updates
                       </AnimatedButton>
                     </div>
                   </AnimatedCard>
                 </AnimatedItem>
-              ))}
+              )}
             </AnimatedSection>
           </div>
         </section>
@@ -217,15 +282,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Organizers */}
+        {/* Organizer */}
         <section className="py-20 bg-aposs-gray-50">
           <div className="container max-w-6xl">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <AnimatedSection animation="slide-left">
                 <div className="space-y-6">
-                  <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold">Organizers</p>
-                  <h2 className="text-4xl md:text-5xl font-bold text-aposs-navy leading-tight">Charles Crabtree & Trevor Incerti</h2>
-                  <p className="text-lg text-aposs-gray-700 leading-relaxed">We built APOSS to make it effortless for scholars of Asian politics to share work, meet collaborators, and get actionable feedback.</p>
+                  <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold">Organizer</p>
+                  <h2 className="text-4xl md:text-5xl font-bold text-aposs-navy leading-tight">Charles Crabtree</h2>
+                  <p className="text-lg text-aposs-gray-700 leading-relaxed">APOSS is designed to make it effortless for scholars of Asian politics to share work, meet collaborators, and get actionable feedback.</p>
                   <div className="flex gap-4">
                     <AnimatedButton variant="secondary" href="/about">
                       About APOSS

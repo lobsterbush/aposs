@@ -24,8 +24,8 @@ export default function PrivacyPage() {
           </p>
           <ul className="list-disc pl-6 text-[#404040] space-y-2">
             <li>Your name, email address, and institutional affiliation</li>
-            <li>Paper titles, abstracts, and uploaded PDF files</li>
-            <li>Research field, methodology, and keywords</li>
+            <li>Paper titles and abstracts</li>
+            <li>Research details such as field, methodology, and keywords</li>
           </ul>
         </section>
         

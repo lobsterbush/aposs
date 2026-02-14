@@ -1,5 +1,5 @@
 # APOSS Project Assessment & Rollout Plan
-## Asian Politics Online Seminar Series
+## Asia Pacific Online Seminar Series
 
 **Date:** November 11, 2025  
 **Status:** Production-Ready with Enhancements Needed
@@ -125,7 +125,7 @@ src/
 ```bash
 EMAIL_FROM="APOSS <notifications@aposs.org>"
 RESEND_API_KEY="re_xxxxx"
-ADMIN_EMAIL="crabtree@dartmouth.edu,incerti@example.com"
+ADMIN_EMAIL="crabtree@dartmouth.edu"
 ```
 
 #### 1.2 File Upload for Papers (Week 1)
@@ -176,8 +176,7 @@ providers: [
 callbacks: {
   async signIn({ user }) {
     const allowedEmails = [
-      'charles.crabtree@dartmouth.edu',
-      'trevor.incerti@example.com'
+      'charles.crabtree@dartmouth.edu'
     ]
     return allowedEmails.includes(user.email)
   }
@@ -235,7 +234,6 @@ If historical data exists in Notion (project has `@notionhq/client` dependency):
 **Organizer Profiles:**
 Add to `/about` or `/organizers`:
 - Charles Crabtree (bio, photo, affiliation)
-- Trevor Incerti (bio, photo, affiliation)
 
 #### 1.6 Testing & QA (Week 2-3)
 **Priority: CRITICAL**
@@ -283,7 +281,7 @@ NEXTAUTH_SECRET=<generate with: openssl rand -base64 32>
 NEXTAUTH_URL=https://aposs.org
 RESEND_API_KEY=re_xxxxx
 EMAIL_FROM=notifications@aposs.org
-ADMIN_EMAIL=crabtree@dartmouth.edu,incerti@example.com
+ADMIN_EMAIL=crabtree@dartmouth.edu
 BLOB_READ_WRITE_TOKEN=vercel_blob_xxxxx
 ```
 

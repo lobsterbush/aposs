@@ -13,7 +13,6 @@ export async function GET() {
         scheduledAt: true,
         presenter: true,
         status: true,
-        zoomJoinUrl: true,
       },
     })
     return NextResponse.json({ success: true, events })

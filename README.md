@@ -1,4 +1,4 @@
-# APOSS - Asian Politics Online Seminar Series
+# APOSS - Asia Pacific Online Seminar Series
 
 A Next.js application for managing academic seminar submissions, scheduling, and event coordination.
 
@@ -110,7 +110,7 @@ This is an internal project for APOSS. For questions or issues, contact the orga
 ## 📧 Contact
 
 - **General Inquiries:** contact@aposs.org
-- **Organizers:** Charles Crabtree & Trevor Incerti
+- **Organizer:** Charles Crabtree
 
 ---
 

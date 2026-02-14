@@ -2,10 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { sendEmail } from '@/lib/email'
 import { generateStatusUpdateEmail } from '@/lib/email-templates/status-update'
+import { requireAdmin } from '@/lib/auth'
+import { z } from 'zod'
+
+const scheduleSchema = z.object({
+  submissionId: z.string().min(1),
+  scheduledAt: z.string().min(1),
+})
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json()
+    const session = await requireAdmin()
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
+    const payload = await request.json()
+    const data = scheduleSchema.parse(payload)
     const { submissionId, scheduledAt } = data
 
     // Get the submission details
@@ -65,6 +77,9 @@ export async function POST(request: NextRequest) {
     }, { status: 201 })
 
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ success: false, message: 'Invalid request', issues: error.issues }, { status: 400 })
+    }
     console.error('Error creating event:', error)
     return NextResponse.json({ 
       success: false, 
@@ -75,6 +90,10 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    const session = await requireAdmin()
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
     const events = await prisma.event.findMany({
       orderBy: { scheduledAt: 'asc' },
       select: {

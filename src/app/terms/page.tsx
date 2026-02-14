@@ -18,9 +18,9 @@ export default function TermsPage() {
         </p>
         
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-[#17152b]">
+          <h2 className="text-2xl font-bold text-[#17152b]">Acceptance of Terms</h2>
           <p className="text-[#404040] leading-relaxed">
-            By accessing or using the Asian Politics Online Seminar Series (APOSS) website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+            By accessing or using the Asia Pacific Online Seminar Series (APOSS) website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
           </p>
         </section>
         

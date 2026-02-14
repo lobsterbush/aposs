@@ -9,6 +9,7 @@ import {
   FileText, 
   Calendar, 
   Users, 
+  Settings,
   LogOut, 
   Menu,
   X
@@ -24,6 +25,7 @@ const navigation = [
   { name: 'Submissions', href: '/admin/submissions', icon: FileText },
   { name: 'Events', href: '/admin/events', icon: Calendar },
   { name: 'Registrations', href: '/admin/registrations', icon: Users },
+  { name: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 
 export function AdminLayout({ children }: AdminLayoutProps) {
@@ -32,7 +34,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-[#f5f5f5]">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div 
@@ -43,7 +45,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
       {/* Sidebar */}
       <aside className={`
-        fixed top-0 left-0 z-50 h-full w-64 bg-[#17152b] text-white transform transition-transform duration-300 ease-in-out
+        fixed top-0 left-0 z-50 h-full w-64 bg-[#111827] text-white transform transition-transform duration-300 ease-in-out
         lg:translate-x-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
@@ -52,7 +54,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <div className="p-6 border-b border-white/10">
             <div className="flex items-center justify-between">
               <Link href="/admin" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#dc7510] rounded-lg flex items-center justify-center font-bold text-lg">
+                <div className="w-10 h-10 bg-[#4b5563] rounded-lg flex items-center justify-center font-bold text-lg">
                   A
                 </div>
                 <div>
@@ -95,8 +97,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
           {/* User info & logout */}
           <div className="p-4 border-t border-white/10">
-            <div className="mb-3 px-4 py-2 bg-white/5 rounded-lg">
-              <div className="text-xs text-white/60 mb-1">Signed in as</div>
+            <div className="mb-3 px-4 py-2 bg-white/10 rounded-lg">
+              <div className="text-xs text-white/70 mb-1">Signed in as</div>
               <div className="text-sm font-medium truncate">{session?.user?.email}</div>
             </div>
             <button
@@ -119,9 +121,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               onClick={() => setSidebarOpen(true)}
               className="p-2 hover:bg-[#f5f5f5] rounded-lg transition-colors"
             >
-              <Menu className="w-6 h-6 text-[#17152b]" />
+              <Menu className="w-6 h-6 text-[#111827]" />
             </button>
-            <div className="font-bold text-[#17152b]">APOSS Admin</div>
+            <div className="font-bold text-[#111827]">APOSS Admin</div>
             <div className="w-10" /> {/* Spacer for centering */}
           </div>
         </header>

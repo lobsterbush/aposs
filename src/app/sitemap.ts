@@ -7,11 +7,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '',
     '/about',
     '/schedule',
+    '/events',
     '/submit',
+    '/register',
+    '/contact',
+    '/guidelines',
     '/presenters',
+    '/organizers',
     '/supporters',
-    '/admin',
-    '/login',
+    '/privacy',
+    '/terms',
+    '/thanks',
   ]
 
   const staticEntries: MetadataRoute.Sitemap = routes.map((path) => ({

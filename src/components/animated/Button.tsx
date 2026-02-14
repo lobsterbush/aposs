@@ -28,10 +28,10 @@ export function AnimatedButton({
   const baseStyles = 'inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed no-underline'
   
   const variants = {
-    primary: 'bg-[#17152b] text-white hover:bg-[#00376c] hover:text-white focus:ring-[#00376c] [&>*]:text-white',
-    secondary: 'bg-[#00376c] text-white hover:bg-[#17152b] hover:text-white focus:ring-[#17152b] [&>*]:text-white',
-    accent: 'bg-[#dc7510] text-white hover:bg-[#ba3828] hover:text-white focus:ring-[#dc7510] [&>*]:text-white',
-    ghost: 'bg-transparent border-2 border-[#17152b] text-[#17152b] hover:bg-[#17152b] hover:text-white focus:ring-[#17152b] hover:[&>*]:text-white',
+    primary: 'bg-transparent border-2 border-[#17152b] text-[#17152b] hover:bg-[#00376c] hover:border-[#00376c] hover:!text-white focus:ring-[#00376c] hover:[&>*]:text-white hover:[&_*]:text-white',
+    secondary: 'bg-transparent border-2 border-[#00376c] text-[#00376c] hover:bg-[#00376c] hover:border-[#00376c] hover:!text-white focus:ring-[#00376c] hover:[&>*]:text-white hover:[&_*]:text-white',
+    accent: 'bg-transparent border-2 border-[#dc7510] text-[#dc7510] hover:bg-[#00376c] hover:border-[#00376c] hover:!text-white focus:ring-[#00376c] hover:[&>*]:text-white hover:[&_*]:text-white',
+    ghost: 'bg-transparent border-2 border-[#17152b] text-[#17152b] hover:bg-[#00376c] hover:border-[#00376c] hover:!text-white focus:ring-[#00376c] hover:[&>*]:text-white hover:[&_*]:text-white',
   }
   
   const sizes = {

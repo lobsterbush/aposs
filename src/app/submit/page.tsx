@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Header } from '@/components/layout/header'
 import { PageHero } from '@/components/layout/PageHero'
 import { AnimatedCard, AnimatedButton } from '@/components/animated'
-import { ArrowLeft, Send, CheckCircle, FileText, User, Sparkles, Star, Globe, Award } from 'lucide-react'
+import { ArrowLeft, Send, CheckCircle, FileText, User, Star, Globe, Award } from 'lucide-react'
 import Link from 'next/link'
 
 interface SubmissionData {
@@ -49,10 +49,29 @@ export default function SubmitPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
+  const [website, setWebsite] = useState('')
+  const [submissionsOpen, setSubmissionsOpen] = useState(true)
+  const [settingsLoaded, setSettingsLoaded] = useState(false)
 
   const handleInputChange = (field: keyof SubmissionData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const res = await fetch('/api/settings')
+        const data = await res.json()
+        if (data.success) {
+          setSubmissionsOpen(Boolean(data.settings?.submissionsOpen))
+        }
+      } catch {
+        setSubmissionsOpen(true)
+      } finally {
+        setSettingsLoaded(true)
+      }
+    }
+    loadSettings()
+  }, [])
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -61,7 +80,7 @@ export default function SubmitPage() {
       const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, website })
       })
       
       if (response.ok) {
@@ -160,7 +179,29 @@ export default function SubmitPage() {
             </AnimatedCard>
           </div>
 
+        {!submissionsOpen && settingsLoaded ? (
+          <AnimatedCard className="border border-[#e5e5e5]">
+            <h2 className="text-2xl font-bold text-[#17152b] mb-2">Submissions are currently closed</h2>
+            <p className="text-[#404040] mb-4">
+              We are not accepting new submissions at the moment. Please check back soon or contact us with questions.
+            </p>
+            <AnimatedButton variant="secondary" href="/contact">
+              Contact us
+            </AnimatedButton>
+          </AnimatedCard>
+        ) : (
         <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="submit-website">Website</label>
+            <input
+              id="submit-website"
+              type="text"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
           {/* Step 1: Author Information */}
           {currentStep === 1 && (
             <AnimatedCard>
@@ -173,8 +214,9 @@ export default function SubmitPage() {
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-[#17152b] mb-2">Full Name</label>
+                  <label htmlFor="submit-author-name" className="block text-sm font-semibold text-[#17152b] mb-2">Full Name</label>
                   <Input
+                    id="submit-author-name"
                     value={formData.authorName}
                     onChange={(e) => handleInputChange('authorName', e.target.value)}
                     placeholder="Dr. Jane Smith"
@@ -183,8 +225,9 @@ export default function SubmitPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                  <label htmlFor="submit-author-email" className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
                   <Input
+                    id="submit-author-email"
                     type="email"
                     value={formData.authorEmail}
                     onChange={(e) => handleInputChange('authorEmail', e.target.value)}
@@ -195,8 +238,9 @@ export default function SubmitPage() {
               </div>
               
               <div className="mt-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Institution/Affiliation</label>
+                <label htmlFor="submit-author-affiliation" className="block text-sm font-semibold text-gray-700 mb-2">Institution/Affiliation</label>
                 <Input
+                  id="submit-author-affiliation"
                   value={formData.authorAffiliation}
                   onChange={(e) => handleInputChange('authorAffiliation', e.target.value)}
                   placeholder="University of Example, Department of Political Science"
@@ -205,8 +249,9 @@ export default function SubmitPage() {
               </div>
               
               <div className="mt-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Brief Bio</label>
+                <label htmlFor="submit-author-bio" className="block text-sm font-semibold text-gray-700 mb-2">Brief Bio</label>
                 <Textarea
+                  id="submit-author-bio"
                   value={formData.authorBio}
                   onChange={(e) => handleInputChange('authorBio', e.target.value)}
                   placeholder="Brief description of your academic background and research interests..."
@@ -216,8 +261,9 @@ export default function SubmitPage() {
               </div>
               
               <div className="mt-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Co-Authors (Optional)</label>
+                <label htmlFor="submit-coauthors" className="block text-sm font-semibold text-gray-700 mb-2">Co-Authors (Optional)</label>
                 <Textarea
+                  id="submit-coauthors"
                   value={formData.coAuthors}
                   onChange={(e) => handleInputChange('coAuthors', e.target.value)}
                   placeholder="List co-authors and their affiliations if applicable..."
@@ -236,7 +282,7 @@ export default function SubmitPage() {
                   Next: Research Details
                 </button>
               </div>
-            </div>
+            </AnimatedCard>
           )}
 
           {/* Step 2: Research Details */}
@@ -251,8 +297,9 @@ export default function SubmitPage() {
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Paper Title</label>
+                  <label htmlFor="submit-title" className="block text-sm font-semibold text-gray-700 mb-2">Paper Title</label>
                   <Input
+                    id="submit-title"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     placeholder="Enter your paper title..."
@@ -261,8 +308,9 @@ export default function SubmitPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Abstract</label>
+                  <label htmlFor="submit-abstract" className="block text-sm font-semibold text-gray-700 mb-2">Abstract</label>
                   <Textarea
+                    id="submit-abstract"
                     value={formData.abstract}
                     onChange={(e) => handleInputChange('abstract', e.target.value)}
                     placeholder="Provide a detailed abstract of your research (200-300 words recommended)..."
@@ -274,8 +322,9 @@ export default function SubmitPage() {
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Research Field</label>
+                    <label htmlFor="submit-research-field" className="block text-sm font-semibold text-gray-700 mb-2">Research Field</label>
                     <select 
+                      id="submit-research-field"
 className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
                       value={formData.researchField}
                       onChange={(e) => handleInputChange('researchField', e.target.value)}
@@ -293,8 +342,9 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Methodology</label>
+                    <label htmlFor="submit-methodology" className="block text-sm font-semibold text-gray-700 mb-2">Methodology</label>
                     <Input
+                      id="submit-methodology"
                       value={formData.methodology}
                       onChange={(e) => handleInputChange('methodology', e.target.value)}
                       placeholder="e.g., Quantitative, Qualitative, Mixed Methods"
@@ -304,8 +354,9 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Keywords</label>
+                  <label htmlFor="submit-keywords" className="block text-sm font-semibold text-gray-700 mb-2">Keywords</label>
                   <Input
+                    id="submit-keywords"
                     value={formData.keywords}
                     onChange={(e) => handleInputChange('keywords', e.target.value)}
                     placeholder="Enter keywords separated by commas..."
@@ -315,8 +366,9 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Presentation preference</label>
+                    <label htmlFor="submit-presentation-preference" className="block text-sm font-semibold text-gray-700 mb-2">Presentation preference</label>
                     <Input
+                      id="submit-presentation-preference"
                       value={formData.presentationPreference}
                       onChange={(e) => handleInputChange('presentationPreference', e.target.value)}
                       placeholder="e.g., Any weekday after 10am JST"
@@ -337,8 +389,9 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Notes</label>
+                  <label htmlFor="submit-availability-notes" className="block text-sm font-semibold text-gray-700 mb-2">Additional Notes</label>
                   <Textarea
+                    id="submit-availability-notes"
                     value={formData.availabilityNotes}
                     onChange={(e) => handleInputChange('availabilityNotes', e.target.value)}
                     placeholder="Any scheduling preferences, discussant suggestions, or special requirements..."
@@ -429,6 +482,7 @@ className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline
             </div>
           )}
         </form>
+        )}
         </div>
       </div>
     </>

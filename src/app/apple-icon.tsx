@@ -5,6 +5,7 @@ export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'
 
 export default async function AppleIcon() {
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
   return new ImageResponse(
     (
       <div
@@ -22,7 +23,7 @@ export default async function AppleIcon() {
           style={{
             width: 140,
             height: 140,
-            background: 'url("/branding/Drop logo ht 2000px.png") center/contain no-repeat',
+            background: `url(\"${baseUrl}/branding/logo-navy-circle.png\") center/contain no-repeat`,
           }}
         />
       </div>

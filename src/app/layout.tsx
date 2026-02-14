@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
+import { validateEnv } from "@/lib/env"
+import { Analytics } from "@/components/Analytics"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,27 +14,28 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+validateEnv()
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: 'APOSS - Asian Politics Online Seminar Series',
+    default: 'APOSS - Asia Pacific Online Seminar Series',
     template: '%s | APOSS',
   },
   description:
-    'The Asian Politics Online Seminar Series is an online seminar series for political scientists working in, on, or adjacent to Asia.',
+    'The Asia Pacific Online Seminar Series is an online seminar series for political scientists working in, on, or adjacent to Asia.',
   keywords: ['APOSS', 'Asian politics', 'seminar', 'political science', 'research'],
   openGraph: {
     type: 'website',
     siteName: 'APOSS',
-    title: 'APOSS - Asian Politics Online Seminar Series',
+    title: 'APOSS - Asia Pacific Online Seminar Series',
     description:
       'A global venue for sharing research on Asian politics. Elegant, inclusive, and collaborative.',
     images: ['/opengraph-image'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'APOSS - Asian Politics Online Seminar Series',
+    title: 'APOSS - Asia Pacific Online Seminar Series',
     description:
       'A global venue for sharing research on Asian politics. Elegant, inclusive, and collaborative.',
     images: ['/twitter-image'],
@@ -59,6 +62,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <Footer />
+          <Analytics />
         </Providers>
       </body>
     </html>

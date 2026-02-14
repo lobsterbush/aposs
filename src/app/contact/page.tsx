@@ -39,20 +39,13 @@ export default function ContactPage() {
         </AnimatedCard>
         
         <AnimatedCard delay={0.2}>
-          <h2 className="text-2xl font-bold text-aposs-navy mb-4">Organizers</h2>
+          <h2 className="text-2xl font-bold text-aposs-navy mb-4">Organizer</h2>
           <div className="space-y-6">
             <div>
               <p className="font-bold text-lg text-aposs-navy">Charles Crabtree</p>
               <p className="text-aposs-gray-700">Senior Lecturer, Monash University & K-Club Professor, Korea University</p>
               <p className="text-sm text-aposs-gray-600 mt-1">
                 Website: <a href="https://charlescrabtree.org" target="_blank" rel="noopener noreferrer" className="text-aposs-blue hover:text-aposs-navy font-semibold">charlescrabtree.org →</a>
-              </p>
-            </div>
-            <div>
-              <p className="font-bold text-lg text-aposs-navy">Trevor Incerti</p>
-              <p className="text-aposs-gray-700">Assistant Professor, University of Amsterdam</p>
-              <p className="text-sm text-aposs-gray-600 mt-1">
-                Website: <a href="https://www.trevorincerti.com" target="_blank" rel="noopener noreferrer" className="text-aposs-blue hover:text-aposs-navy font-semibold">trevorincerti.com →</a>
               </p>
             </div>
           </div>

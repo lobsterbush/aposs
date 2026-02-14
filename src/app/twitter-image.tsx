@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'APOSS - Asian Politics Online Seminar Series'
+export const alt = 'APOSS - Asia Pacific Online Seminar Series'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

@@ -88,7 +88,7 @@ CREATE TABLE "public"."blog_posts" (
 CREATE TABLE "public"."settings" (
     "id" TEXT NOT NULL,
     "siteName" TEXT NOT NULL DEFAULT 'APOSS',
-    "siteDescription" TEXT NOT NULL DEFAULT 'Asian Politics Online Seminar Series',
+    "siteDescription" TEXT NOT NULL DEFAULT 'Asia Pacific Online Seminar Series',
     "contactEmail" TEXT NOT NULL DEFAULT 'contact@aposs.org',
     "submissionsOpen" BOOLEAN NOT NULL DEFAULT true,
     "maxSubmissionsPerWeek" INTEGER NOT NULL DEFAULT 1,

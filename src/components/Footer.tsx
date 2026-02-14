@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 export function Footer() {
+  const currentYear = new Date().getFullYear()
   return (
     <footer className="bg-gray-50">
       <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
@@ -17,7 +18,7 @@ export function Footer() {
         </div>
         <div className="mt-8 md:order-1 md:mt-0">
 <p className="text-center text-sm leading-5 text-[#17152b] font-medium">
-            &copy; 2020 Asian Politics Online Seminar Series (APOSS). All rights reserved.
+            &copy; 2020–{currentYear} Asia Pacific Online Seminar Series (APOSS). All rights reserved.
           </p>
         </div>
       </div>

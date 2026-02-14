@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Home, Calendar, Upload, Settings, Users, BookOpen } from 'lucide-react'
+import { Menu, X, Home, Calendar, Upload, Users, BookOpen } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -22,13 +22,13 @@ export function Header() {
 
   const navigation = [
     { name: 'Home', href: '/', icon: Home },
+    { name: 'About', href: '/about', icon: Home },
     { name: 'Schedule', href: '/schedule', icon: Calendar },
     { name: 'Register', href: '/register', icon: Upload },
-    { name: 'Organizers', href: '/organizers', icon: Users },
     { name: 'Guidelines', href: '/guidelines', icon: BookOpen },
     { name: 'Presenters', href: '/presenters', icon: Home },
     { name: 'Supporters', href: '/supporters', icon: Home },
-    { name: 'About', href: '/about', icon: Home },
+    { name: 'Organizers', href: '/organizers', icon: Users },
   ]
 
   return (
@@ -72,7 +72,7 @@ export function Header() {
                     href={item.href}
                     className={`no-underline px-4 py-2 font-semibold text-sm rounded-lg transition-colors ${
                       isActive
-                        ? 'bg-aposs-navy text-white'
+                        ? 'bg-aposs-gray-100 text-aposs-navy'
                         : 'text-aposs-gray-700 hover:bg-aposs-gray-100 hover:text-aposs-navy'
                     }`}
                   >
@@ -86,15 +86,9 @@ export function Header() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/submit" className="no-underline inline-flex items-center gap-2 bg-aposs-orange text-white px-5 py-2.5 rounded-lg hover:bg-aposs-red transition-colors font-semibold shadow-sm">
+              <Link href="/submit" className="no-underline inline-flex items-center gap-2 bg-[#dc7510] !text-white hover:!text-white px-5 py-2.5 rounded-lg hover:bg-[#ba3828] transition-colors font-semibold shadow-sm [&>*]:text-white [&_*]:text-white">
                 <Upload className="w-4 h-4" />
-                Submit
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/admin" className="no-underline inline-flex items-center gap-2 bg-white text-aposs-navy px-5 py-2.5 border-2 border-aposs-navy rounded-lg hover:bg-aposs-navy hover:text-white transition-colors font-semibold">
-                <Settings className="w-4 h-4" />
-                Admin
+                <span className="text-white">Submit</span>
               </Link>
             </motion.div>
           </div>

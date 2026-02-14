@@ -9,8 +9,8 @@ export async function GET(
   // Next.js runtime will pass { params }
   const { id } = context.params
   try {
-    const event = await prisma.event.findUnique({
-      where: { id },
+    const event = await prisma.event.findFirst({
+      where: { id, status: { in: ['SCHEDULED', 'COMPLETED'] } },
       select: {
         id: true,
         title: true,
@@ -18,7 +18,6 @@ export async function GET(
         scheduledAt: true,
         presenter: true,
         status: true,
-        zoomJoinUrl: true,
       },
     })
     if (!event) {

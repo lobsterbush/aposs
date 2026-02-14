@@ -1,11 +1,12 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'APOSS - Asian Politics Online Seminar Series'
+export const alt = 'APOSS - Asia Pacific Online Seminar Series'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function OpengraphImage() {
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
   return new ImageResponse(
     (
       <div
@@ -42,7 +43,7 @@ export default async function OpengraphImage() {
               style={{
                 width: 72,
                 height: 72,
-                background: 'url("/branding/Drop logo ht 2000px.png") center/contain no-repeat',
+                background: `url(\"${baseUrl}/branding/logo-navy-circle.png\") center/contain no-repeat`,
               }}
             />
           </div>
@@ -50,7 +51,7 @@ export default async function OpengraphImage() {
         </div>
         <div style={{ height: 28 }} />
         <div style={{ color: 'white', fontSize: 58, fontWeight: 800, lineHeight: 1.1 }}>
-          Asian Politics Online Seminar Series
+          Asia Pacific Online Seminar Series
         </div>
         <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 28, marginTop: 16 }}>
           Advancing Asian Politics Research

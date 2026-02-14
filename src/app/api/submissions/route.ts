@@ -3,10 +3,44 @@ import { prisma } from '@/lib/db'
 import { sendEmail, getAdminEmails } from '@/lib/email'
 import { generateSubmissionConfirmationEmail } from '@/lib/email-templates/submission-confirmation'
 import { generateAdminAlertEmail } from '@/lib/email-templates/admin-alert'
+import { requireAdmin } from '@/lib/auth'
+import { z } from 'zod'
+import { rateLimit } from '@/lib/rate-limit'
+
+const submissionSchema = z.object({
+  title: z.string().min(3),
+  abstract: z.string().min(20),
+  authorName: z.string().min(2),
+  authorEmail: z.string().email(),
+  authorAffiliation: z.string().min(2),
+  authorBio: z.string().optional().nullable(),
+  coAuthors: z.string().optional().nullable(),
+  researchField: z.string().min(1),
+  methodology: z.string().optional().nullable(),
+  keywords: z.string().min(1),
+  isPublished: z.boolean().optional(),
+  presentationPreference: z.string().optional().nullable(),
+  availabilityNotes: z.string().optional().nullable(),
+})
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json()
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      'unknown'
+    const limit = await rateLimit(`submissions:${ip}`, 5, 10 * 60 * 1000)
+    if (!limit.allowed) {
+      const retryAfter = Math.max(1, Math.ceil((limit.resetAt - Date.now()) / 1000))
+      return NextResponse.json(
+        { success: false, message: 'Too many submissions. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(retryAfter) } }
+      )
+    }
+    const payload = await request.json()
+    if (payload.website) {
+      return NextResponse.json({ success: true })
+    }
+    const data = submissionSchema.parse(payload)
 
     const submission = await prisma.submission.create({
       data: {
@@ -69,6 +103,9 @@ export async function POST(request: NextRequest) {
     }, { status: 201 })
 
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ success: false, message: 'Invalid submission data', issues: error.issues }, { status: 400 })
+    }
     console.error('Error creating submission:', error)
     return NextResponse.json({ 
       success: false, 
@@ -79,6 +116,10 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    const session = await requireAdmin()
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
     const submissions = await prisma.submission.findMany({
       orderBy: { submittedAt: 'desc' },
       select: {

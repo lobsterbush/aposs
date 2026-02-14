@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import { Header } from '@/components/layout/header'
 import { PageHero } from '@/components/layout/PageHero'
-import { Calendar, User, ExternalLink } from 'lucide-react'
+import { Calendar, User } from 'lucide-react'
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -16,11 +16,11 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
     presenter: 'Dr. Sample Researcher',
     presenterEmail: 'sample@example.org',
     status: 'SCHEDULED' as const,
-    zoomJoinUrl: '',
   }
+  const useSample = process.env.NODE_ENV === 'development'
 
   let event:
-    | { id: string; title: string; description: string | null; scheduledAt: Date; presenter: string; presenterEmail?: string | null; status: 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'; zoomJoinUrl?: string | null }
+    | { id: string; title: string; description: string | null; scheduledAt: Date; presenter: string; presenterEmail?: string | null; status: 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED' }
     | null = null
 
   if (process.env.DATABASE_URL) {
@@ -35,14 +35,13 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
           presenter: true,
           presenterEmail: true,
           status: true,
-          zoomJoinUrl: true,
         },
       })
     } catch {
-      event = id === 'sample' ? sample : null
+      event = useSample && id === 'sample' ? sample : null
     }
   } else {
-    event = id === 'sample' ? sample : null
+    event = useSample && id === 'sample' ? sample : null
   }
 
   if (!event) return notFound()
@@ -64,12 +63,9 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         {event.description && (
           <p className="text-gray-800 leading-relaxed mb-6">{event.description}</p>
         )}
-        {event.zoomJoinUrl && (
-          <a href={event.zoomJoinUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-4 py-2 rounded-lg bg-[#00376c] text-white font-semibold hover:bg-[#17152b]">
-            Join Meeting
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </a>
-        )}
+        <div className="inline-flex items-center px-4 py-2 rounded-lg bg-[#f5f5f5] border border-[#e5e5e5] text-sm font-semibold text-[#737373]">
+          Registration required for Zoom access
+        </div>
       </main>
     </div>
   )

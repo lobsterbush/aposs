@@ -2,7 +2,7 @@
 
 ## Overview
 
-APOSS (Asian Politics Online Seminar Series) is a Next.js 15 application for managing academic seminar submissions and scheduling.
+APOSS (Asia Pacific Online Seminar Series) is a Next.js 15 application for managing academic seminar submissions and scheduling.
 
 **Key Features:**
 - ✅ Paper submission system (text form)

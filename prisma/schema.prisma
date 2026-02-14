@@ -1,5 +1,5 @@
 // APOSS Database Schema
-// Asian Politics Online Seminar Series
+// Asia Pacific Online Seminar Series
 
 generator client {
   provider = "prisma-client-js"
@@ -134,6 +134,18 @@ model Submission {
 
   @@map("submissions")
 }
+model Registration {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  affiliation  String?
+  interests    String?
+  sections     String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("registrations")
+}
 
 model Event {
   id              String      @id @default(cuid())
@@ -172,7 +184,7 @@ model Event {
 model Settings {
   id                    String   @id @default(cuid())
   siteName              String   @default("APOSS")
-  siteDescription       String   @default("Asian Politics Online Seminar Series")
+  siteDescription       String   @default("Asia Pacific Online Seminar Series")
   contactEmail          String   @default("contact@aposs.org")
   submissionsOpen       Boolean  @default(true)
   maxSubmissionsPerWeek Int      @default(1)
