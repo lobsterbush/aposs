@@ -27,7 +27,7 @@ export default function GuidelinesPage() {
             </li>
             <li className="flex items-start gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-orange text-white flex items-center justify-center text-xs font-bold mt-0.5">•</span>
-              <span>They will be scheduled weekly or every two weeks, depending on submissions.</span>
+              <span>They are scheduled every two weeks.</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-orange text-white flex items-center justify-center text-xs font-bold mt-0.5">•</span>

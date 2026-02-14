@@ -79,7 +79,7 @@ export default function Home() {
                     Asia Pacific Online Seminar Series
                   </h1>
                   <p className="text-xl text-aposs-gray-700 leading-relaxed max-w-2xl">
-                    Weekly online seminars connecting researchers across continents. Concise talks, sharp feedback, and an inclusive audience.
+                    Online seminars every two weeks connecting researchers across continents. Concise talks, sharp feedback, and an inclusive audience.
                   </p>
                 </motion.div>
 
