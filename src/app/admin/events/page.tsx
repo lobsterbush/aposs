@@ -6,7 +6,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { AnimatedCard } from '@/components/animated'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Calendar, User, Link2, Clock } from 'lucide-react'
+import { Calendar, User, Link2, Clock, Mail } from 'lucide-react'
 
 type EventStatus = 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'
 
@@ -33,6 +33,9 @@ export default function AdminEventsPage() {
   const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<EventStatus | 'ALL'>('ALL')
   const [edits, setEdits] = useState<Record<string, { scheduledAt: string; status: EventStatus; zoomJoinUrl: string }>>({})
+  const [audience, setAudience] = useState<Record<string, string>>({})
+  const [mailState, setMailState] = useState<Record<string, { sending: boolean; message?: string; ok?: boolean }>>({})
+  const sectionOptions = ['ALL', 'East Asia', 'Southeast Asia', 'South Asia', 'Central Asia', 'Comparative/General', 'Methods & Measurement']
 
   const fetchEvents = async () => {
     try {
@@ -41,14 +44,17 @@ export default function AdminEventsPage() {
       if (data.success) {
         setEvents(data.events || [])
         const nextEdits: Record<string, { scheduledAt: string; status: EventStatus; zoomJoinUrl: string }> = {}
+        const nextAudience: Record<string, string> = {}
         data.events.forEach((event: Event) => {
           nextEdits[event.id] = {
             scheduledAt: toLocalInput(event.scheduledAt),
             status: event.status,
             zoomJoinUrl: event.zoomJoinUrl || '',
           }
+          nextAudience[event.id] = 'ALL'
         })
         setEdits(nextEdits)
+        setAudience(nextAudience)
       }
     } catch (error) {
       console.error('Error fetching events:', error)
@@ -94,6 +100,39 @@ export default function AdminEventsPage() {
       }
     } catch (error) {
       console.error('Error updating event:', error)
+    }
+  }
+
+  const sendAnnouncements = async (id: string) => {
+    const section = audience[id] || 'ALL'
+    setMailState(prev => ({ ...prev, [id]: { sending: true } }))
+    try {
+      const res = await fetch(`/api/events/${id}/notify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ section }),
+      })
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setMailState(prev => ({
+          ...prev,
+          [id]: {
+            sending: false,
+            ok: true,
+            message: `Sent ${data.sent}/${data.recipients} emails (${data.failed} failed).`,
+          }
+        }))
+      } else {
+        setMailState(prev => ({
+          ...prev,
+          [id]: { sending: false, ok: false, message: data.message || 'Failed to send announcements.' }
+        }))
+      }
+    } catch {
+      setMailState(prev => ({
+        ...prev,
+        [id]: { sending: false, ok: false, message: 'Failed to send announcements.' }
+      }))
     }
   }
 
@@ -195,6 +234,31 @@ export default function AdminEventsPage() {
 
                   <div className="flex justify-end">
                     <Button onClick={() => saveEvent(event.id)}>Save changes</Button>
+                  </div>
+                  <div className="pt-4 border-t border-[#e5e5e5]">
+                    <div className="flex flex-col md:flex-row gap-3 md:items-end md:justify-between">
+                      <div className="flex-1">
+                        <label className="block text-sm font-semibold text-[#111827] mb-2">Email audience</label>
+                        <select
+                          value={audience[event.id] || 'ALL'}
+                          onChange={(e) => setAudience(prev => ({ ...prev, [event.id]: e.target.value }))}
+                          className="w-full md:max-w-sm rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                        >
+                          {sectionOptions.map(section => (
+                            <option key={section} value={section}>{section}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <Button onClick={() => sendAnnouncements(event.id)} disabled={mailState[event.id]?.sending}>
+                        <Mail className="w-4 h-4 mr-2" />
+                        {mailState[event.id]?.sending ? 'Sending…' : 'Email attendees'}
+                      </Button>
+                    </div>
+                    {mailState[event.id]?.message && (
+                      <p className={`text-sm mt-3 ${mailState[event.id]?.ok ? 'text-green-700' : 'text-red-700'}`}>
+                        {mailState[event.id]?.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </AnimatedCard>
