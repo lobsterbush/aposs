@@ -124,7 +124,7 @@ async function testRegistrations() {
     name: 'Test Attendee',
     email: 'test-attendee@example.com',
     affiliation: 'Test University',
-    interests: 'Asian politics, testing'
+    interests: 'Asia Pacific politics, testing'
   };
   
   try {

@@ -36,7 +36,7 @@ export default function AboutPage() {
         <section className="container max-w-4xl py-16 space-y-6">
           <AnimatedCard>
             <p className="text-lg text-aposs-gray-700 leading-relaxed">
-              The Asia Pacific Online Seminar Series (APOSS) is an online seminar series for political scientists working in, on, or adjacent to Asia.
+              The Asia Pacific Online Seminar Series (APOSS) is an online seminar series for political scientists working in, on, or adjacent to the Asia Pacific.
               {' '}We have hosted{' '}
               {seminarCount === null ? (
                 <span className="font-bold text-aposs-navy">many seminars to date</span>
@@ -63,7 +63,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-aposs-navy mb-4">About APOSS</h2>
             <div className="space-y-4 text-aposs-gray-700 leading-relaxed">
               <p>
-                APOSS is a forum for rigorous, problem-driven research on Asian politics. We welcome a diversity of methods and stages of research and aim to provide constructive, focused feedback in each session.
+                APOSS is a forum for rigorous, problem-driven research on Asia Pacific politics. We welcome a diversity of methods and stages of research and aim to provide constructive, focused feedback in each session.
               </p>
               <p>
                 We prioritize early-career scholars and foster a collegial environment with discussant-led feedback and open Q&A.
@@ -76,7 +76,7 @@ export default function AboutPage() {
             <ul className="space-y-3 text-aposs-gray-700 leading-relaxed">
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
-                <span>Foster rigorous, problem-driven research on Asian politics.</span>
+                <span>Foster rigorous, problem-driven research on Asia Pacific politics.</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>

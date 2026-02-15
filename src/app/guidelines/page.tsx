@@ -31,7 +31,7 @@ export default function GuidelinesPage() {
             </li>
             <li className="flex items-start gap-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-orange text-white flex items-center justify-center text-xs font-bold mt-0.5">•</span>
-              <span>We will recruit 2–3 discussants (from Asia and other parts of the world) to read each paper and offer feedback.</span>
+              <span>We will recruit 2–3 discussants (from the Asia Pacific and other parts of the world) to read each paper and offer feedback.</span>
             </li>
           </ul>
         </AnimatedCard>

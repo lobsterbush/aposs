@@ -178,9 +178,9 @@ async function main() {
 
   const e3 = await prisma.event.create({
     data: {
-      title: "Roundtable: New Methods in Asian Politics",
+      title: "Roundtable: New Methods in Asia Pacific Politics",
       description:
-        "A special session discussing cutting-edge methods for studying Asian politics, featuring multiple speakers.",
+        "A special session discussing methods for studying Asia Pacific politics, featuring multiple speakers.",
       scheduledAt: upcoming2Date,
       duration: 120,
       timeZone: "Asia/Singapore",

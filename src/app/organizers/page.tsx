@@ -9,7 +9,7 @@ export default function OrganizersPage() {
     <div className="min-h-screen bg-[#fafafa]">
       <Header />
       <div style={{ marginTop: '80px' }}>
-        <PageHero title="Organizer" subtitle="Leading APOSS" />
+        <PageHero title="Organizer" subtitle="Coordinating APOSS" />
       </div>
       <main className="mx-auto max-w-4xl px-6 py-16">
 

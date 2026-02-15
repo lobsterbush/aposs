@@ -124,7 +124,7 @@ export default function SubmitPage() {
       <Header />
       <div className="min-h-screen bg-[#fafafa]">
         <div style={{ marginTop: '80px' }}>
-          <PageHero title="Submit Your Research" subtitle="Share your groundbreaking research with the APOSS community">
+          <PageHero title="Submit Your Research" subtitle="Share your research with the APOSS community">
             <div className="flex items-center justify-center gap-8 mt-8">
               <div className="text-center">
                 <div className="w-16 h-16 bg-[#00376c] rounded-2xl flex items-center justify-center mb-3 mx-auto">
@@ -136,13 +136,13 @@ export default function SubmitPage() {
                 <div className="w-16 h-16 bg-[#dc7510] rounded-2xl flex items-center justify-center mb-3 mx-auto">
                   <Star className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-sm font-bold text-[#17152b]">Expert Review</div>
+                <div className="text-sm font-bold text-[#17152b]">Thoughtful Review</div>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-[#ba3828] rounded-2xl flex items-center justify-center mb-3 mx-auto">
                   <Award className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-sm font-bold text-[#17152b]">Career Boost</div>
+                <div className="text-sm font-bold text-[#17152b]">Professional Development</div>
               </div>
             </div>
           </PageHero>

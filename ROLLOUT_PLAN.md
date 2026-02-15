@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-APOSS is a Next.js 15 application designed to manage an online academic seminar series focused on Asian politics. The platform features a **fully functional online paper submission system**, admin dashboard, event scheduling, and public-facing pages. The core infrastructure is solid and ready for deployment, with opportunities for enhancement in email notifications, authentication, and workflow automation.
+APOSS is a Next.js 15 application designed to manage an online academic seminar series focused on Asia Pacific politics. The platform features a **fully functional online paper submission system**, admin dashboard, event scheduling, and public-facing pages. The core infrastructure is solid and ready for deployment, with opportunities for enhancement in email notifications, authentication, and workflow automation.
 
 **Key Strengths:**
 - ✅ Complete paper submission system (multi-step form)

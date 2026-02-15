@@ -79,7 +79,7 @@ export default function Home() {
                     Asia Pacific Online Seminar Series
                   </h1>
                   <p className="text-xl text-aposs-gray-700 leading-relaxed max-w-2xl">
-                    Online seminars every two weeks connecting researchers across continents. Concise talks, sharp feedback, and an inclusive audience.
+                    Online seminars every two weeks connecting researchers across continents. Concise talks, constructive feedback, and an inclusive audience.
                   </p>
                 </motion.div>
 
@@ -129,7 +129,7 @@ export default function Home() {
           <div className="container max-w-6xl">
             <AnimatedSection animation="fade" className="text-center mb-12">
               <h2 className="text-4xl font-bold text-aposs-navy mb-4">Why APOSS?</h2>
-              <p className="text-lg text-aposs-gray-700 max-w-2xl mx-auto">A seminar series designed for the modern scholar</p>
+              <p className="text-lg text-aposs-gray-700 max-w-2xl mx-auto">A seminar series designed for collaborative research exchange</p>
             </AnimatedSection>
             
             <AnimatedSection animation="slide-up" stagger className="grid md:grid-cols-3 gap-8">
@@ -290,7 +290,7 @@ export default function Home() {
                 <div className="space-y-6">
                   <p className="text-sm uppercase tracking-widest text-aposs-orange font-semibold">Organizer</p>
                   <h2 className="text-4xl md:text-5xl font-bold text-aposs-navy leading-tight">Charles Crabtree</h2>
-                  <p className="text-lg text-aposs-gray-700 leading-relaxed">APOSS is designed to make it effortless for scholars of Asian politics to share work, meet collaborators, and get actionable feedback.</p>
+                  <p className="text-lg text-aposs-gray-700 leading-relaxed">APOSS aims to help scholars of Asia Pacific politics share work, meet collaborators, and receive useful feedback.</p>
                   <div className="flex gap-4">
                     <AnimatedButton variant="secondary" href="/about">
                       About APOSS
@@ -308,7 +308,7 @@ export default function Home() {
                   <ul className="space-y-4 text-aposs-gray-700">
                     <li className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
-                      <span>Work that advances understanding of Asian politics or uses Asian cases comparatively.</span>
+                      <span>Work that advances understanding of Asia Pacific politics or uses Asia Pacific cases comparatively.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-aposs-blue text-white flex items-center justify-center text-xs font-bold mt-0.5">✓</span>

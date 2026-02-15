@@ -23,14 +23,14 @@ export const metadata: Metadata = {
     template: '%s | APOSS',
   },
   description:
-    'The Asia Pacific Online Seminar Series is an online seminar series for political scientists working in, on, or adjacent to Asia.',
-  keywords: ['APOSS', 'Asian politics', 'seminar', 'political science', 'research'],
+    'The Asia Pacific Online Seminar Series is an online seminar series for political scientists working in, on, or adjacent to the Asia Pacific.',
+  keywords: ['APOSS', 'Asia Pacific politics', 'seminar', 'political science', 'research'],
   openGraph: {
     type: 'website',
     siteName: 'APOSS',
     title: 'APOSS - Asia Pacific Online Seminar Series',
     description:
-      'A global venue for sharing research on Asian politics. Elegant, inclusive, and collaborative.',
+      'A collaborative venue for sharing research on Asia Pacific politics.',
     images: ['/opengraph-image'],
   },
   twitter: {

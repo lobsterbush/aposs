@@ -54,7 +54,7 @@ export default async function OpengraphImage() {
           Asia Pacific Online Seminar Series
         </div>
         <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 28, marginTop: 16 }}>
-          Advancing Asian Politics Research
+          Asia Pacific Politics Research
         </div>
       </div>
     ),

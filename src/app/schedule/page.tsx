@@ -84,7 +84,7 @@ export default function SchedulePage() {
     <div className="min-h-screen bg-[#fafafa]">
       <Header />
       <div style={{ marginTop: '80px' }}>
-        <PageHero title="APOSS Schedule" subtitle="Join us for engaging seminars on Asian politics" />
+        <PageHero title="APOSS Schedule" subtitle="Join us for engaging seminars on Asia Pacific politics" />
       </div>
       <div className="container max-w-6xl py-16">
 
